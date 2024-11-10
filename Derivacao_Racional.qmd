@@ -1,0 +1,197 @@
+---
+title: "Derivação de Fatores"
+author: "Luiz Droubi"
+format: 
+  metropolis-revealjs:
+    incremental: true  
+---
+
+```{r}
+library(appraiseR)
+library(MASS)
+
+# Data parameters
+n <- 30
+m <- c(450, 15, 4, 5000)
+s <- c(175, 4, 3, 500)
+ryx1 <- -0.50; ryx2 <- -0.30; ryx3 <- -.40; rx1x2 <- .90; rx1x3 <- 0; rx2x3 <- 0
+
+sigma <- sqrt(log(s^2/m^2 + 1))
+mu <- log(m) - sigma^2/2
+rhoyx1 <- log(ryx1*prod(s[c(4, 1)])   / prod(m[c(4, 1)]) + 1)
+rhoyx2 <- log(ryx2*prod(s[c(4, 2)])   / prod(m[c(4, 2)]) + 1)
+rhoyx3 <- log(ryx3*prod(s[c(4, 3)])   / prod(m[c(4, 3)]) + 1)
+rhox1x2 <- log(rx1x2*prod(s[1:2])     / prod(m[1:2]) + 1)
+rhox1x3 <- log(rx1x3*prod(s[c(1, 3)]) / prod(m[c(1, 3)]) + 1)
+rhox2x3 <- log(rx2x3*prod(s[2:3]) / prod(m[2:3]) + 1)
+
+##                 Area         Frente        Incl.         #PU
+Sigma <- matrix(c(sigma[1]^2,    rhox1x2,    rhox1x3,     rhoyx1,  # Area
+                     rhox1x2, sigma[2]^2,    rhox2x3,     rhoyx2,  # Frente
+                     rhox1x3,    rhox2x3, sigma[3]^2,     rhoyx3,  # Incl.
+                      rhoyx1,     rhoyx2,     rhoyx3, sigma[4]^2   # PU
+                  ),         # Frente
+                ncol = 4, byrow = T)
+
+# Create data
+set.seed(1)
+dados <- exp(mvrnorm(n=n, mu=  mu, Sigma = Sigma,
+                     empirical = T))
+colnames(dados) <- c("Area", "Frente", "Incl", "PU")
+dados <- apply(dados, 2, round, 2)
+dados <- as.data.frame(dados)
+```
+
+```{r}
+# Impute NA's
+set.seed(2)
+dados$Incl[sample(1:25, 10)] <- NA
+dados$Frente[sample(1:25, 5)] <- NA
+
+# Adjust fit
+fit <- lm(log(PU) ~ log(Area) + log(Frente) + log1p(Incl), data = dados)
+AreaCoef <- coef(fit)["log(Area)"]
+FrenteCoef <- coef(fit)["log(Frente)"]
+```
+
+```{r}
+fit1 <- update(fit, .~. - log1p(Incl))
+```
+
+
+# Fatores: Derivação coerente
+
+## Fatores Aditivos {.smaller}
+
+Gilson Lima [-@lima2006] ponderava que:
+
+- Na Forma Aditiva, o preço unitário de cada imóvel deve ser assim computado:
+
+- $\hat{PU_i} = \bar{PU}_{hom}.[1 + (F_{1i}-1) + (F_{2i}-1) + \ldots + (F_{ki}-1)]$
+
+- Analogamente, com um modelo de regressão linear na forma aditiva:
+
+- $\hat{PU_i} = \hat{\beta_0} + \hat \beta_1 X_{1i} + \hat \beta_2 X_{2i}  + \ldots + \hat \beta_k X_{ki}$
+
+- Então: 
+
+- $$\left\{\begin{matrix}
+\hat\beta_0 = \bar{PU}_{hom} \\
+F_{1i}=\hat{\beta_1}/\hat{\beta_0}.X_{1i} \\
+F_{2i}=\hat{\beta_2}/\hat{\beta_0}.X_{2i}  \\
+\cdots \\
+F_{ki}=\hat{\beta_k}/\hat{\beta_0}.X_{ki}
+\end{matrix}\right.$$
+
+- Porém, quem disse que $\hat\beta_0 = \bar{PU}_{hom}$?
+
+## Fatores Multiplicativos {.smaller}
+
+Gilson Lima [-@lima2006] ponderava que, para os fatores multiplicativos:
+
+- $\hat{PU_i} = \bar{PU}_{hom}.F_{1i}.F_{2i}\ldots F_{ki}$
+
+- Enquanto que com os modelos multiplicativos:
+
+- $\hat{PU_i} = \exp(\hat \beta_0 + \hat \beta_1 X_{1i} + \ldots + \hat \beta_kX_{ki})$
+
+- $\hat{PU_i} = \exp(\hat\beta_0).\exp(\hat \beta_1 X_{1i}) \ldots \exp(\hat \beta_kX_{ki})$
+
+- Então: 
+
+- $$\left\{\begin{matrix}
+\hat\beta_0 = \ln(\bar{PU}_{hom}) \,\text{ou}\,  \bar{PU}_{hom} = \exp(\hat\beta_0)\\
+F_{1i}=\exp(\hat{\beta_1}X_{1i}) \\
+F_{2i}=\exp(\hat{\beta_1}X_{2i}) \\
+\cdots \\
+F_{ki}=\exp(\hat{\beta_k}X_{ki})
+\end{matrix}\right.$$
+
+- Porém, quem disse que $\bar{PU}_{hom} = \exp(\beta_0)$?
+
+## Testando o método {.smaller}
+
+```{r}
+library(broom)
+library(kableExtra)
+s1 <- summary(fit1)
+fit1 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit1$residuals)),
+                        paste("R2: ", 
+                              brf(s1$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(s1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- $\bar{PU}_{hom} = \exp(\hat\beta_0) = \exp(9,57) = 14.328,42$
+
+- O valor calculado pelo modelo para o lote paradigma, no entanto, é de
+`r Reais(exp(predict(fit1, newdata = list(Area = 450, Frente = 15))))`/m2.
+
+- Não funciona, pois $\exp(\hat \beta_0)$ é o valor de um lote com Área igual a
+zero e Frente igual a zero (o que não existe na prática), e não igual ao valor
+do lote paradigma!
+
+## O que deve ser feito? {.smaller}
+
+```{r}
+fit2 <- update(fit1, .~log(Area/450) + log(Frente/15))
+s2 <- summary(fit2)
+fit2 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit2$residuals)),
+                        paste("R2: ", 
+                              brf(s2$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(s2$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- As variáveis foram modificadas de modo que $\hat\beta_0$ expresse o valor
+médio unitário do lote paradigma.
+
+- $\bar{PU}_{hom} = \exp(\hat\beta_0) \approx \exp(8,50) = 4.914,77$
+
+## Derivação dos Fatores {.smaller}
+
+- Fator Área:
+
+- $F_{1i}=\exp(\hat{\beta_1}X_{1i}) \rightarrow F_{Area} = \exp[-0,33.\ln(Area/450)]$
+
+- $\exp(a.X) = \exp(x)^a$
+
+- $F_{Area} = \exp\left [-0,33.\ln\left (\frac{Area}{450} \right)  \right ] = \exp\left [\ln \left (\frac{Area}{450}\right ) \right ]^{ -0,33}$
+
+- $F_{Area} = \left (\frac{Area}{450}\right )^{-0,33}=\left (\frac{450}{Area}\right )^{+0,33}$
+
+- Fator Frente:
+
+- Analogamente, $F_{Frente} = \left (\frac{Frente}{15} \right )^{0,36}$
+
+## Equação de Estimação {.smaller}
+
+- A equação de estimação, após a derivação dos fatores, pode ser escrita:
+
+- $$PU = 4.915,00. \left ( \frac{450}{Area} \right )^{0,33}.\left ( \frac{Frente}{15} \right )^{0,36}$$
+
+- Exemplo:
+  - Seja o caso de estimar o valor de um imóvel com área de 750$m^2$ e 
+  Frente de 25$m$:
+  - $$PU = 4.915,00. \left ( \frac{450}{750} \right )^{0,33}.\left ( \frac{25}{15} \right )^{0,36}$$
+  - $$PU = 4.915,00\cdot 0,845\cdot 1,20 = 4.983,81$$
+
+## Referências

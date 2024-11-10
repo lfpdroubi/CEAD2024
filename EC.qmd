@@ -1,0 +1,208 @@
+---
+title: "Fatores"
+subtitle: "Estudo de Caso"
+format: revealjs
+---
+
+# Estudo de Caso
+
+
+```{r}
+library(readxl)
+veyron <- read_excel("veyron.xlsx")
+veyron <- within(veyron, {
+  Ano <- factor(Ano)
+  PC <- factor(PC, levels = c("Baixo", "Medio", "Alto"))
+  Infra <- factor(Infra, ordered = T)
+  Studio <- factor(Studio)
+  RendaMedia <- RendaMedia/1212 # transforma renda média para s.m.
+})
+```
+
+## Apartamentos em Florianópolis (2022)
+
+```{r}
+library(ggplot2)
+library(ggpmisc)
+ggplot(veyron, aes(x = Andar, y = log(PU))) + # aes(x = log(Andar), y = log(PU)))
+  geom_point() +
+  stat_poly_line() +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P")), 
+               formula = y ~ x, 
+               label.x = "right", label.y = "bottom")
+```
+
+## Verificação da correlação
+
+```{r}
+library(GGally)
+ggcorr(veyron, label = T)
+```
+
+## Modelo minimalista {.smaller}
+
+```{r}
+library(kableExtra)
+library(broom)
+library(appraiseR)
+fit <- lm(log(PU) ~ PC + Ano + Idade + log(AP/100), data = veyron)
+s <- summary(fit)
+fit |>
+  tidy(exponentiate = T, conf.int = T, conf.level = .80) |>
+  kable(digits = 2, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",           
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Modelo completo {.smaller}
+
+```{r}
+fit1 <-
+  update(fit, log(PU) ~ PC + Ano + Idade + log(AP/100) + Vagas +
+           log(RendaMedia/7) + Studio + Suites, data = veyron, 
+         subset = -c(15, 67, 76), x = T, y = T)
+s1 <- summary(fit1)
+fit1 |>
+  tidy(exponentiate = T, conf.int = T, conf.level = .80) |>
+  kable(digits = 2, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit1$residuals)), 
+                        paste("R2: ", brf(s1$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Derivação de Fatores {.smaller}
+
+::: columns
+::: column
+-   Fator Área:
+    -   $$F_{Area} = \left( \frac{A_{imovel}}{100}\right)^{-0,32}$$
+-   Fator Renda:
+    -   $$F_{Renda} = \left( \frac{Renda_{setor}}{7 (s.m.)}\right)^{0,44}$$
+-   Fator Idade:
+    -   $$F_{Idade} = 0,99^{Idade}$$
+-   Fator Suites:
+    -   $$F_{Suites} = 1,05^{Suites}$$
+:::
+
+::: column
+-   Fator Data:
+    -   $$F_{Data} =  \left\{\begin{matrix}
+         1,00 \qquad \text{se 2018}\\
+         1,37 \qquad \text{se 2022}
+        \end{matrix}\right.$$
+-   Fator Vagas:
+    -   $$F_{Vagas} = 1,10^{Vagas}$$
+-   Fator Studio:
+    -   $$F_{Studio} = 1,15$$
+-   Fator Padrão Construtivo:
+    -   $$F_{PC} =  \left\{\begin{matrix}
+         1,00 \qquad \text{se Baixo}\\
+         1,13 \qquad \text{se Médio}\\
+         1,34 \qquad \text{se Alto }
+        \end{matrix}\right.$$
+:::
+:::
+
+## Equação de Estimação {.smaller}
+
+$$PU = 5.978,00.\left( \frac{A_{imovel}}{100}\right)^{-0,32}.\left( \frac{Renda_{setor}}{7 (s.m.)}\right)^{0,44}.0,99^{Idade}.1,05^{Suites}.\\
+1,10^{Vagas}.1,15^{Studio}.1,13^{PCMédio}.1,34^{PCAlto}.1,37^{Ano2022}$$
+
+# Homogeneização
+
+## Homogeneização {.smaller}
+
+-   Para obter o Preço Unitário Homogeneizado de cada imóvel da amostra, deve-se fazer:
+
+-   $$PU_{hom_i} = \frac{PU_i}{F_{Area}.F_{Renda}.F_{Idade}.F_{Suites}.F_{Vagas}.F_{Studio}}$$
+
+## Modelo com variável Andar {.smaller}
+
+```{r}
+veyronHom <- within(na.omit(veyron),{
+  fatorAP <- (AP/100)^coef(fit1)["log(AP/100)"]
+  fatorSuites <- exp(coef(fit1)["Suites"])^Suites
+  fatorVagas <- exp(coef(fit1)["Vagas"])^Vagas
+  fatorPC <- ifelse(PC == "Medio", exp(coef(fit1)["PCMedio"]), 
+                    ifelse(PC == "Alto", exp(coef(fit1)["PCAlto"]),
+                           ifelse(PC == "Baixo", 1, NA)))
+  fatorStudio <- ifelse(Studio == "Nao", 1, exp(coef(fit1)["StudioSim"]))
+  fatorIdade <- exp(coef(fit1)["StudioSim"])^Idade
+  fatorAno <- ifelse(Ano == "_2018", 1, 1.37)
+  fatorRM <- (RendaMedia/7)^(-.44)
+  PUh <- PU/(fatorAP*fatorSuites*fatorVagas*fatorPC*fatorAno*fatorRM)
+})
+```
+
+```{r}
+fitAndar <- lm(log(PUh) ~ Andar, data = veyronHom, subset = -c(3,16,28))
+s <- summary(fitAndar)
+fitAndar |>
+  tidy(conf.int = T, conf.level = .80)|>
+  kable(digits = 3, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html",
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",  
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fitAndar$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Gráfico do modelo
+
+```{r}
+ggplot(veyronHom[-c(3, 16, 28), ], aes(x = Andar, y = PUh)) +
+  geom_point() +
+  stat_poly_line() +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "p"))) +
+  scale_y_continuous(transform = "log", breaks = scales::log_breaks())
+```
+
+```{r, eval = FALSE}
+veyronNum <- as.data.frame(
+  cbind(fit1$x, 
+        veyron[-c(15, 67, 76, 116), 
+               c("Andar", "AP", "DBM", "Vagas", "Suites", 
+                 "RendaMedia",  "PU")]
+        )
+  )
+fit2 <- lm(log(PU) ~ offset(.1264*PCMedio) + offset(.2895*PCAlto) +
+             offset(.3184*Ano_2022) + offset(-.0105*Idade) +
+             offset(-.3213*log(AP/100)) + offset(.443*log(RendaMedia)) + 
+             offset(.0968*Vagas) + offset(.138*StudioSim)+
+             offset(.0495*Suites) + I(Andar^2), 
+           data = veyronNum)
+s2 <- summary(fit2)
+fit2 |>
+  tidy()|>
+  kable(digits = 3, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit2$residuals)), 
+                        paste("R2: ", brf(s2$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s2$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```

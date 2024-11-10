@@ -1,0 +1,1183 @@
+---
+title: "Fatores"
+author: "Luiz Droubi"
+format:
+  pptx:
+    reference-doc: refs/template.pptx
+    incremental: true  
+prefer-html: true
+---
+
+
+```{r, eval = FALSE}
+set.seed(5)
+inclinacao <- rlnorm(n=25, meanlog = 1, sd = .75)
+```
+
+```{r, eval = FALSE}
+set.seed(1)
+area <- rlnorm(n = 25, meanlog = 7, sdlog = .75)
+frente <- area/rlnorm(n = 25, meanlog = 3.5, sdlog = .5)
+#inclinacao <- rlnorm(n=25, meanlog = 1, sd = .75)
+pu <- 25000*area^-.25*frente^.10*inclinacao^-.10*rnorm(n=25, mean = 1, sd = .1)
+dados <- data.frame(PU = pu, Area = area, Frente = frente, 
+                    Incl = inclinacao)
+#dados$Frente[sample(1:25, 5)] <- NA
+dados$Frente[c(4, 13, 14, 19, 24)] <- NA
+#dados$Inclinacao[sample(1:25, 10)] <- NA
+dados$Incl[c(2, 3, 11, 13, 14, 17, 18, 20, 23, 24)] <- NA
+dados <- as.data.frame(apply(dados, 2, round, 2))
+```
+
+```{r}
+library(appraiseR)
+library(MASS)
+
+# Data parameters
+n <- 30
+m <- c(450, 15, 4, 5000)
+s <- c(175, 4, 3, 500)
+ryx1 <- -0.50; ryx2 <- -0.30; ryx3 <- -.40; rx1x2 <- .90; rx1x3 <- 0; rx2x3 <- 0
+
+sigma <- sqrt(log(s^2/m^2 + 1))
+mu <- log(m) - sigma^2/2
+rhoyx1 <- log(ryx1*prod(s[c(4, 1)])   / prod(m[c(4, 1)]) + 1)
+rhoyx2 <- log(ryx2*prod(s[c(4, 2)])   / prod(m[c(4, 2)]) + 1)
+rhoyx3 <- log(ryx3*prod(s[c(4, 3)])   / prod(m[c(4, 3)]) + 1)
+rhox1x2 <- log(rx1x2*prod(s[1:2])     / prod(m[1:2]) + 1)
+rhox1x3 <- log(rx1x3*prod(s[c(1, 3)]) / prod(m[c(1, 3)]) + 1)
+rhox2x3 <- log(rx2x3*prod(s[2:3]) / prod(m[2:3]) + 1)
+
+##                 Area         Frente        Incl.         #PU
+Sigma <- matrix(c(sigma[1]^2,    rhox1x2,    rhox1x3,     rhoyx1,  # Area
+                     rhox1x2, sigma[2]^2,    rhox2x3,     rhoyx2,  # Frente
+                     rhox1x3,    rhox2x3, sigma[3]^2,     rhoyx3,  # Incl.
+                      rhoyx1,     rhoyx2,     rhoyx3, sigma[4]^2   # PU
+                  ),         # Frente
+                ncol = 4, byrow = T)
+
+# Create data
+set.seed(1)
+dados <- exp(mvrnorm(n=n, mu=  mu, Sigma = Sigma,
+                     empirical = T))
+colnames(dados) <- c("Area", "Frente", "Incl", "PU")
+dados <- apply(dados, 2, round, 2)
+dados <- as.data.frame(dados)
+```
+
+```{r}
+# Impute NA's
+set.seed(2)
+dados$Incl[sample(1:25, 10)] <- NA
+dados$Frente[sample(1:25, 5)] <- NA
+
+# Adjust fit
+fit <- lm(log(PU) ~ log(Area) + log(Frente) + log(Incl), data = dados)
+AreaCoef <- coef(fit)["log(Area)"]
+FrenteCoef <- coef(fit)["log(Frente)"]
+```
+
+# Introdução
+
+## Introdução
+
+-   Imóveis são bens heterogêneos
+-   A homogeneização de dados hetorogêneos se faz necessária visando 
+possibilitar compará-los de uma maneira justa
+-   Como fazer isto é a questão que se levanta
+-   A "homogeneização" pode ser feita através de modelos estatísticos de 
+regressão linear, por exemplo
+-   Fatores seriam, então, ainda necessários?
+-   Como derivá-los corretamente?
+
+# Dados
+
+## Dados
+
+-   Numa amostra de dados de mercado obtivemos:
+
+-   25 dados de terrenos de variadas características
+
+-   Outras variáveis foram coletadas, porém de forma incompleta, como a variável 
+`Frente` e a variável `Incl` (inclinação da superfície do terreno).
+
+## Dados (2) {.smaller}
+
+```{r}
+library(vtable)
+st(dados, out = "kable", add.median = T)
+```
+
+- Nota-se que existem apenas 25 dados com a variável `Frente`.
+- E que existem apenas 20 dados com a variável `Incl`.
+
+## Modelo de Regressão Múltipla {.smaller}
+
+### Apenas casos completos 
+
+```{r}
+library(broom)
+library(knitr)
+library(kableExtra)
+s <- summary(fit)
+fit |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",   
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- No modelo acima, percebemos que a variável `Frente` não se mostrou 
+significante.
+
+- A estimação do modelo ficou prejudicada com apenas com 15 dados!
+
+# Análise exploratória dos dados
+
+## Variável Área
+
+```{r}
+library(ggplot2)
+theme_set(theme_minimal(base_size = 15))
+p1 <- 
+  ggplot(dados, aes(x = Area, y = PU)) +
+  geom_point(color = "cornflowerblue", size = 2) +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/450) + k,
+              method.args=list(start=c(a=-100, k=10000)))
+p1
+```
+
+## Variável Frente
+
+```{r}
+library(mice)
+library(ggmice)
+p2 <-
+  ggmice(dados, aes(x = Frente, y = PU)) +
+  geom_point(size = 2) +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/15) + k,
+              method.args=list(start=c(a=-100, k=10000)))  +
+  theme_minimal(base_size = 15)
+p2
+```
+
+## Variável Inclinação
+
+```{r}
+formula <- y ~ a*log1p(x) + k
+p3 <- 
+  ggmice(dados, aes(x = Incl, y = PU)) +
+  geom_point(size = 2) +
+  # stat_poly_line(formula = formula)
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log1p(x) + k,
+              method.args=list(start=c(a=-100, k=10000)))  +
+  theme_minimal(base_size = 15)
+p3
+```
+
+# Derivação de Fatores
+
+## Fator Área {.smaller}
+
+```{r}
+library(ggpmisc)
+old.option <- options(OutDec = ",")
+p1 +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P"), sep = "*\"; \"*"), 
+               formula = log(y) ~ log(x), 
+               coef.digits = 2, coef.keep.zeros = FALSE, 
+               f.digits = 3, p.digits = 2,
+               eq.with.lhs = "widehat(ln(PU))~`=`~",
+               eq.x.rhs = ".ln(Area)",
+               label.x = "right", color = "red")
+```
+
+-   Dado que a área tem correlação com a variável PU, na forma log-log, pode-se assim ajustar um fator área:
+
+-   $$F_a = \left ( \frac{A_{imovel}}{A_{paradigma}} \right)^{-0,15} = \left ( \frac{A_{paradigma}}{A_{imovel}} \right)^{0,15} = \left ( \frac{450}{A_{imovel}} \right)^{0,15}$$
+
+## Fator Área (2) {.smaller}
+
+```{r}
+#| echo: true
+fitArea <- lm(log(PU) ~ log(Area), data = dados)
+```
+
+
+```{r}
+fitArea |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",                        "Inf.", "Sup.")) |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+
+
+- Deve-se reparar que um fator assim ajustado é do tipo **_multiplicativo_**!
+
+- De acordo com o modelo acima, um imóvel paradigma (`Area` = 450m2), tem
+valor de mercado igual a:
+
+. . .
+
+```{r}
+#| echo: true
+predict(fitArea, newdata = list(Area = 450))
+```
+
+
+- Em reais, isto equivale a 
+`r Reais(exp(predict(fitArea, newdata = list(Area = 450))))`/m2 (exp(8,50)).
+
+- Já para um imóvel de 750m2, tem-se: $F_{Area} = (450/750)^{0,15} = 0,926$
+
+- Para avaliar o valor de mercado do lote de 750 m2, basta multiplicar o 
+valor do lote paradigma pelo fator área, obtendo assim o valor de 
+`r Reais(exp(predict(fitArea, newdata = list(Area = 450)))*(450/750)^.15)`/m2.
+
+## Fator Frente {.smaller}
+
+```{r}
+p2 +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P"), sep = "*\"; \"*"), 
+               formula = log(y) ~ log(x), 
+               coef.digits = 2, coef.keep.zeros = FALSE, 
+               f.digits = 2, p.digits = 2,
+               eq.with.lhs = "widehat(ln(PU))~`=`~",
+               eq.x.rhs = ".ln(Frente)",
+               label.x = "right", color = "red")
+```
+
+-   Dado que não há evidência forte da correlação entre as variáveis `PU` e 
+`Frente`, pode-se concluir que a variável `Frente` não é estatisticamente
+significante e, portanto, não é necessário o ajuste de um fator frente!
+
+-   Além do mais, um fator frente assim ajustado seria contraditório: quanto 
+maior a frente, menores os preços unitários!
+
+## Fator inclinação {.smaller}
+
+```{r}
+p3 +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P"), sep = "*\"; \"*"), 
+               formula = log(y) ~ log1p(x), 
+               coef.digits = 3, coef.keep.zeros = FALSE, 
+               f.digits = 2, p.digits = 2,
+               eq.with.lhs = "widehat(ln(PU))~`=`~",
+               eq.x.rhs = ".ln(Incl+1)",
+               label.x = "right", color = "red")
+options(old.option)
+```
+
+-   Para a variável `Incl`, assim como para a variável `Area`, há evidência
+de que há um efeito sobre `PU`.
+
+-   Pode-se, assim, ajustar um fator inclinação:
+
+-   $$F_i = \left (\frac{i_{imovel} + 1}{i_{paradigma} + 1} \right )^{-0,10} = \left (\frac{i_{paradigma} + 1}{i_{imovel} + 1} \right )^{0,10} = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$$
+
+## Fator inclinação (2) {.smaller}
+
+```{r}
+#| echo: true
+fitIncl <- lm(log(PU) ~ log1p(Incl), data = dados)
+```
+
+```{r}
+fitIncl |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2,
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",                        "Inf.", "Sup.")) |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+1. Para o lote paradigma (plano): $F_i = \left( \frac{1}{0+1}\right)^{0,10}=1,0$
+2. Para um lote com inclinação igual a 5%: $F_i = \left( \frac{1}{5+1}\right)^{0,10}=0,84$
+
+- O fator também deverá ser aplicado de forma **_multiplicativa_**!
+- Se o lote paradigma (plano) possui valor igual a 
+`r Reais(exp(coef(fitIncl)["(Intercept)"]))`/m2.
+- Então um lote com inclinação de 5% possui VM igual a
+`r Reais(.84*exp(coef(fitIncl)["(Intercept)"]))`/m2.
+
+. . .
+
+```{r}
+#| echo: true
+p <- predict(fitIncl, newdata = list(Incl = 5))
+exp(p)
+```
+
+## Reflexões
+
+- No modelo de regressão linear múltipla, com menos dados disponíveis, o efeito
+da variável `Frente` era positivo, porém estatisticamente insignificante.
+
+- No modelo de regressão simples, com mais dados, o efeito da variável `Frente`
+também se mostrou insignificante, porém negativo.
+
+- Qual o efeito real da variável `Frente`? 
+
+## Efeito "real" da variável Frente {.smaller}
+
+- Análise da variável `Frente` *após* a homogeneização dos dados com os fatores
+`Area` e `Inclinacao`:
+
+. . .
+
+```{r}
+dados <- within(dados, {
+  FArea <- (450/Area)^.15
+  FIncl <- (1/(Incl + 1))^.10
+  PUhom <- PU/(FArea*FIncl)
+})
+```
+
+```{r}
+p2a <-
+  ggmice(dados, aes(x = Frente, y = PUhom)) +
+  geom_point(size = 2) +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/15) + k,
+              method.args=list(start=c(a=-100, k=10000))) +
+  theme_minimal(base_size = 15)
+p2a +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P"), sep = "*\"; \"*"), 
+               formula = log(y) ~ log(x), 
+               coef.digits = 1, coef.keep.zeros = FALSE, 
+               f.digits = 2, p.digits = 2,
+               eq.with.lhs = "widehat(ln(PU[hom]))~`=`~",
+               eq.x.rhs = ".ln(Frente)",
+               label.x = "right", color = "red")
+```
+
+# Fatores vs. RLM
+
+## Abordagem através da RLM {.smaller}
+
+### Modelo sem a variável Inclinação
+
+```{r}
+fit1 <- lm(log(PU) ~ log(Area) + log(Frente), data = dados)
+s1 <- summary(fit1)
+fit1 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit1$residuals)),
+                        paste("R2: ", 
+                              brf(s1$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(s1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+-   A retirada da variável `Incl` do modelo melhora o resultado da estimação dos
+outros coeficientes (mais dados).
+
+- A variável `Frente`, agora, demonstrou-se significante e com efeito 
+positivo.
+
+- O coeficiente de determinação diminui bastante com a retirada da variável
+`Incl`.
+
+## Derivação de Fatores a partir da RLM
+
+- O fator Área seria: $F_{Area} = \left ( \frac{450}{A_{imovel}} \right)^{0,33}$
+
+- O fator Frente seria: $F_{Frente} = \left ( \frac{F_{imovel}}{15} \right)^{0,36}$
+
+- Os fatores derivados devem ser utilizados na forma **_multiplicativa_**!
+
+## Aplicação dos fatores derivados da RLM {.smaller}
+
+- Baseado no modelo de regressão múltipla, um lote paradigma (450m2 e 15m de 
+Frente) teria valor unitário de mercado igual a:
+
+. . . 
+
+```{r}
+#| echo: true
+p <- predict(fit1, newdata = list(Area = 450, Frente = 15))
+exp(p)
+```
+
+- Para um lote com 25m de `Frente` e 750m2 de `Area`, teríamos:
+
+- Fator Área: $F_{Area} = \left ( \frac{450}{750} \right)^{0,33} \approx 0,845$
+
+- Fator Frente: $F_{Frente} = \left ( \frac{25}{15} \right)^{0,36} \approx 1,20$
+
+- O valor do imóvel referido, então, seria igual a:
+
+  - $4927,63.0,845.1,20 \approx$ `r Reais(exp(p)*.845*1.20)`
+
+- Com a previsão efetuada a partir do próprio modelo, temos:
+
+. . . 
+
+```{r}
+#| echo: true
+p <- predict(fit1, newdata = list(Area = 750, Frente = 25))
+exp(p)
+```
+
+- Como levar em conta a influência da variável `Incl`?
+
+## Aplicação do Fator `Incl` {.smaller}
+
+- Como vimos, é possível ajustarmos bons modelos com a remoção de uma variável
+que conta com muitos valores faltantes, como a variável `Incl`.
+
+- No entanto, se a sua remoção do modelo melhora a estimação, por outro lado, 
+devemos levar em conta a influência da variável de uma ou outra maneira
+
+- Para isto, é possível aplicar o fator `Incl` derivado da regressão simples:
+
+- Por exemplo, imagine o mesmo lote avaliado no exemplo anterior (`Area` = 750m,
+`Frente` = 25m), porém com 10% de inclinação.
+
+  - Pode-se aplicar o fator `Incl`: $F_i = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10} = \left( \frac{1}{10 + 1} \right)^{0,10} \approx 0,79$
+  - Assim, o valor de mercado de um lote com `Area` = 750m, `Frente` = 25m e
+  `Incl` igual a 10% é igual a: 
+  - $4927,63.0,845.1,20.0,79 \approx$`r Reais(exp(p)*.845*1.20*.79)`
+
+# Reflexões
+
+## Análise Exploratória
+
+```{r}
+library(car)
+scatterplotMatrix(~ log(PU) + log(Area) + log(Frente) + log(Incl), 
+                  data = dados, smooth = FALSE, las = 1)
+```
+
+## Relação de Inclinação com covariantes
+
+```{r}
+#| label: fig-InclinacaoOthers
+#| fig-cap: "Relação da variável Inclinação com outras VE."
+#| fig-subcap:
+#|   - "Incl vs. Area"
+#|   - "Incl vs. Frente"
+#| layout-ncol: 2
+ggmice(dados, aes(x = Incl, y = Area)) +
+  geom_point(size = 2) +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/360) + k,
+              method.args=list(start=c(a=-100, k=10000))) +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P")), 
+               formula = log(y) ~ log(x), 
+               label.x = "right", color = "red")
+ggmice(dados, aes(x = Incl, y = Frente)) +
+  geom_point(size = 2) +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/360) + k,
+              method.args=list(start=c(a=-100, k=10000))) +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P")), 
+               formula = log(y) ~ log(x), 
+               label.x = "right", color = "red")
+```
+
+- Não há qualquer relação entre `Incl` e as variáveis `Frente` e `Area`.
+
+## Relação entre covariantes Frente e Área
+
+```{r}
+ggmice(dados, aes(x = Frente, y = Area)) +
+  geom_point() +
+  stat_smooth(method="nls", se=FALSE, formula=y~a*log(x) + k,
+              method.args=list(start=c(a=-100, k=10000))) +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P")), 
+               formula = log(y) ~ log(x), 
+               label.x = "left")
+```
+
+## Aparte: imputação de dados
+
+```{r, include = FALSE}
+d <- mice(dados, method = "pmm", m = 1, seed = 20,
+     formulas = list("Frente" = log(Frente) ~ log(PU) + log(Area) +
+                       log(Incl),
+                     "Incl" = log(Incl) ~ log(Frente) + log(PU) +
+                       log(Area))
+)
+```
+
+```{r}
+nlsFit <- nls(Area~a*log(Frente) + k, data = dados, start = c(a=-100, k=10000))
+FUN <- function(x) coef(nlsFit)["a"]*log(x) + coef(nlsFit)["k"]
+ggmice(d, aes(x = Frente, y = Area)) +
+  geom_point(size = 2) +
+  geom_function(fun = FUN, color = "cornflowerblue", size = 1)
+```
+
+- Existem algoritmos de imputação de dados capazes de imputar valores coerentes
+mesmo na presença de não-linearidade e heteroscedasticidade.
+
+## Aparte: imputação de dados (2)
+
+```{r}
+nlsFit <- nls(PU~a*log(Incl) + k, data = dados, start = c(a=-100, k=10000))
+FUN <- function(x) coef(nlsFit)["a"]*log(x) + coef(nlsFit)["k"]
+ggmice(d, aes(x = Incl, y = PU)) +
+  geom_point(size = 2) +
+  geom_function(fun = FUN, color = "cornflowerblue", size = 1)
+```
+
+## Aparte: imputação de dados (3) {.smaller}
+
+
+### Modelo com dados imputados
+
+```{r}
+ImpFit <- lm(log(PU) ~ log(Area/450) + log(Frente/15) + log1p(Incl), 
+             data = complete(d))
+sImp <- summary(ImpFit)
+ImpFit |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html",
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(ImpFit$residuals)),
+                        paste("R2: ", 
+                              brf(sImp$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(sImp$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- A imputação de dados permite o ajuste de modelos com todas as variáveis,
+aproveitando todas as informações disponíveis.
+
+- Este modelo pode ser utilizado, posteriormente, para o ajuste de fatores.
+
+- O procedimento de imputação de dados poderia ser padronizado pela NBR 14.653,
+visando permitir imputações de dados, desde que baseados em procedimentos
+pré-definidos!
+
+- @doi:10.1080/02664763.2016.1158246: Melhor método para imputação de dados em
+pequenas amostras: *joint multiple imputation* (JMI)!
+
+## Aparte: imputação de dados (4)
+
+```{r}
+library(JointAI)
+dados <- within(dados,{
+  logPU <- log(PU)
+  logArea <- log(Area/450)
+  logFrente <- log(Frente/15)
+  logIncl <- log1p(Incl)
+})
+ImpFit1 <- lm_imp(logPU ~ logArea + logFrente + logIncl, data = dados, 
+                  n.iter = 1000)
+summary(ImpFit1)
+```
+
+
+## Paradoxo de Simpson
+
+-   $\ln(PU) = \beta_0 + \beta_1.\ln(Area) + \beta_2.\ln(Frente) + \varepsilon_1$ 
+
+-   $\ln(Area) = \beta_3 + \beta_4.\ln(Frente) + \varepsilon_2$ 
+
+-   $\ln(PU) = \beta_0 + \beta_1\beta_3 + (\beta_2 + \beta_1\beta_4).\ln(Frente) + \varepsilon$ 
+
+-   $\ln(PU) = 9,57 - 0,33.\ln(Area) + 0,36\ln(Frente) + \varepsilon_1$
+
+-   $\ln(Area) = 2,66 + 1,27.\ln(Frente) + \varepsilon_2$
+
+-   $\hat{\ln(PU)} = 8,69 - 0,33.2,66 + (0,36 -0,33.1,27).\ln(Frente)$
+
+-   $\hat{\ln(PU)} = 8,88 - 0,06.\ln(Frente)$
+
+## Paradoxo de Simpson (2)
+
+```{r}
+#| label: mcPlots
+#| fig-cap: "Gráficos Marginais/Condicionais"
+#| fig-width: 7
+#| fig-height: 3.5
+mcPlots(fit1, las = 1, title = FALSE)
+```
+
+- Nos modelos de regressão linear múltipla, o efeito de uma variável é computado
+após a "homogeneização" da outra!
+
+## Correlação de Ordem-Zero, Parcial e Semiparcial {.smaller}
+
+- Existem basicamente três tipos de correlação entre variáveis:
+
+  - A de Pearson (ordem-zero), quando analisadas isoladamente.
+
+  - A Parcial, computada enquanto se retira(m) o(s) efeito(s) de outra(s)
+  variável(eis).
+
+  - A semi-parcial, que expressa a relação única entre uma variável
+independente e a variável dependente.
+
+. . . 
+
+:::: {.columns}
+
+::: {.column width="50%"}
+![Correlação Parcial](refs/Partial.png)
+:::
+
+::: {.column width="50%"}
+![Correlação Semi-parcial](refs/SemiPartial.png)
+:::
+
+::::
+
+## Correlação de Ordem Zero, Parcial e Semi-Parcial (2) {.smaller}
+
+```{r}
+olsrr::ols_correlations(ImpFit) |>
+  kable(digits = 2, format.args = list(decimal.mark = ",", big.mark = "."))
+```
+
+- Nós vemos na tabela acima a correlação de ordem zero, a correlação parcial e a
+correlação semi-parcial (coluna *Part*). 
+
+- O valor da correlação semi-parcial elevado ao quadrado é também conhecido como **coeficiente de determinação parcial**!
+
+- Por exemplo, o coeficiente de determinação parcial da variável `Frente` é 
+igual a $sr_{Frente} ^2 = 0,33^2 = 0,11$.
+
+- Já o coeficiente de determinação parcial da variável `Area` é igual a 
+$sr_{Area} ^2 = -0,52^2 = 0,27$
+
+- E o coeficiente de determinação parcial da variável `Incl` é igual a 
+$sr_{Incl} ^2 = -0,57^2 = 0,32$
+
+## Correlação de Ordem Zero, Parcial e Semi-Parcial (3) {.smaller}
+
+- Os coeficientes de determinação parcial (ou as correlações semi-parciais) são,
+assim, uma boa opção para compreender a importância de uma variável explicativa
+no modelo de regressão linear múltipla.
+
+- Mas é importante notar que a soma dos coeficientes de determinação parcial
+não é igual ao $R^2$ do modelo completo!
+
+## Modelos {.smaller}
+
+```{r}
+#| label: tbl-modeloCompleto
+#| tbl-cap: "Modelo Completo"
+ImpFit |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html",
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(
+                        paste("R2: ", 
+                              brf(sImp$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(sImp$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+
+```{r}
+#| label: tbl-modeloSemFrente
+#| tbl-cap: "Modelo sem variável Frente"
+ImpFit1 <- update(ImpFit, .~.-log(Frente/15))
+sImp1 <- summary(ImpFit1)
+ImpFit1 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html",
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(
+                        paste("R2: ", 
+                              brf(sImp1$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(sImp1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+
+
+## Reflexões {.smaller}
+
+-   No mercado imobilário existem diversas, inúmeras variáveis explicativas
+
+-   Muitas delas estão correlacionadas entre si, a exemplo das variáveis `Area` 
+e `Frente`
+    -   Quando as variáveis explicativas estão correlacionadas, não se pode 
+    ignorar o efeito da presença/ausência de uma sobre a outra na modelagem
+
+-   Outras variáveis não estão necessariamente correlacionadas com as outras. É 
+o exemplo da variável `Incl`. Podemos também citar a variável `Andar`, em
+apartamentos, ou a posição no andar
+    -   Quando as variáveis não estão potencialmente correlacionadas com as 
+    outras variáveis do modelo, faz sentido a derivação de um fator de maneira
+    isolada.
+    -   Quando a variável em análise estiver potencialmente correlacionada 
+    apenas com algumas das variáveis, pode fazer sentido um modelo de regressão
+    múltipla auxiliar com o objetivo de estimar, sem viés, o seu coeficiente.
+    
+# Fatores: Derivação coerente {.tiny}
+
+## Fatores Aditivos {.smaller}
+
+Gilson Lima [-@lima2006] ponderava que:
+
+- Na Forma Aditiva, o preço unitário de cada imóvel deve ser assim computado:
+
+- $\hat{PU_i} = \bar{PU}_{hom}.[1 + (F_{1i}-1) + (F_{2i}-1) + \ldots + (F_{ki}-1)]$
+
+- Analogamente, com um modelo de regressão linear na forma aditiva:
+
+- $\hat{PU_i} = \hat{\beta_0} + \hat \beta_1 X_{1i} + \hat \beta_2 X_{2i}  + \ldots + \hat \beta_k X_{ki}$
+
+- Então: 
+
+- $$\left\{\begin{matrix}
+\hat\beta_0 = \bar{PU}_{hom} \\
+F_{1i}=\hat{\beta_1}/\hat{\beta_0}.X_{1i} \\
+F_{2i}=\hat{\beta_2}/\hat{\beta_0}.X_{2i}  \\
+\cdots \\
+F_{ki}=\hat{\beta_k}/\hat{\beta_0}.X_{ki}
+\end{matrix}\right.$$
+
+- Porém, quem disse que $\hat\beta_0 = \bar{PU}_{hom}$?
+
+## Fatores Multiplicativos {.smaller}
+
+Gilson Lima [-@lima2006] ponderava que, para os fatores multiplicativos:
+
+- $\hat{PU_i} = \bar{PU}_{hom}.F_{1i}.F_{2i}\ldots F_{ki}$
+
+- Enquanto que com os modelos multiplicativos:
+
+- $\hat{PU_i} = \exp(\hat \beta_0 + \hat \beta_1 X_{1i} + \ldots + \hat \beta_kX_{ki})$
+
+- $\hat{PU_i} = \exp(\hat\beta_0).\exp(\hat \beta_1 X_{1i}) \ldots \exp(\hat \beta_kX_{ki})$
+
+- Então: 
+
+- $$\left\{\begin{matrix}
+\hat\beta_0 = \ln(\bar{PU}_{hom}) \,\text{ou}\,  \bar{PU}_{hom} = \exp(\hat\beta_0)\\
+F_{1i}=\exp(\hat{\beta_1}X_{1i}) \\
+F_{2i}=\exp(\hat{\beta_1}X_{2i}) \\
+\cdots \\
+F_{ki}=\exp(\hat{\beta_k}X_{ki})
+\end{matrix}\right.$$
+
+- Porém, quem disse que $\bar{PU}_{hom} = \exp(\beta_0)$?
+
+## Testando o método {.smaller}
+
+```{r}
+fit1 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit1$residuals)),
+                        paste("R2: ", 
+                              brf(s1$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(s1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- $\bar{PU}_{hom} = \exp(\hat\beta_0) = \exp(9,57) = 14.328,42$
+
+- Nós vimos, contudo, que o valor calculado para o lote paradigma era de
+`r Reais(exp(predict(fit1, newdata = list(Area = 450, Frente = 15))))`/m2.
+
+- Não funciona, pois $\exp(\hat \beta_0)$ é o valor de um lote com Área igual a
+zero e Frente igual a zero, o que não existe na prática!
+
+## O que deve ser feito? {.smaller}
+
+```{r}
+fit2 <- update(fit1, .~log(Area/450) + log(Frente/15))
+s2 <- summary(fit2)
+fit2 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit2$residuals)),
+                        paste("R2: ", 
+                              brf(s2$r.squared, digits = 2)),
+                        paste("R2aj: ", 
+                              brf(s2$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+- As variáveis foram modificadas de modo que $\hat\beta_0$ expresse o valor
+médio unitário do lote paradigma.
+
+- $\bar{PU}_{hom} = \exp(\hat\beta_0) \approx \exp(8,50) = 4.914,77$
+
+## Derivação dos Fatores {.smaller}
+
+- Fator Área:
+
+- $F_{1i}=\exp(\hat{\beta_1}X_{1i}) \rightarrow F_{Area} = \exp[-0,33.\ln(Area/450)]$
+
+- $\exp(a.X) = \exp(x)^a$
+
+- $F_{Area} = \exp[-0,33.\ln(Area/450)] = \exp[\ln(Area/450)]^{ -0,33} = (Area/450)^{ -0,33}=(450/Area)^{0,33}$
+
+- Fator Frente:
+
+- Analogamente, $F_{Frente} = (Frente/15)^{0,36}$
+
+# Estudo de Caso
+
+## Apartamentos em Florianópolis (2022)
+
+```{r}
+library(readxl)
+veyron <- read_excel("veyron.xlsx")
+veyron <- within(veyron, {
+  Ano <- factor(Ano)
+  PC <- factor(PC, levels = c("Baixo", "Medio", "Alto"))
+  Infra <- factor(Infra, ordered = T)
+  Studio <- factor(Studio)
+  RendaMedia <- RendaMedia/1212 # transforma renda média para s.m.
+})
+ggplot(veyron, aes(x = Andar, y = PU)) + # aes(x = log(Andar), y = log(PU))) +
+  geom_point() +
+  stat_smooth(method = "lm") +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P")), 
+               formula = y ~ x, 
+               label.x = "right", label.y = "bottom")
+```
+
+## Modelo minimalista
+
+```{r}
+fit <- lm(log(PU) ~ PC + Ano + Idade + log(AP/100), data = veyron)
+s <- summary(fit)
+fit |>
+  tidy(exponentiate = T, conf.int = T, conf.level = .80) |>
+  kable(digits = 2, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",           
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Modelo completo
+
+```{r}
+fit1 <-
+  update(fit, log(PU) ~ PC + Ano + Idade + log(AP/100) + Vagas +
+           log(RendaMedia/7) + Studio + Suites, data = veyron, 
+         subset = -c(15, 67, 76), x = T, y = T)
+s1 <- summary(fit1)
+fit1 |>
+  tidy(exponentiate = T, conf.int = T, conf.level = .80) |>
+  kable(digits = 2, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit1$residuals)), 
+                        paste("R2: ", brf(s1$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s1$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Derivação de Fatores
+
+::: columns
+::: column
+-   Fator Área:
+    -   $$F_{Area} = \left( \frac{A_{imovel}}{100}\right)^{-0,32}$$
+-   Fator Renda:
+    -   $$F_{Renda} = \left( \frac{Renda_{setor}}{7 (s.m.)}\right)^{0,44}$$
+-   Fator Idade:
+    -   $$F_{Idade} = 0,99^{Idade}$$
+-   Fator Suites:
+    -   $$F_{Suites} = 1,05^{Suites}$$
+:::
+
+::: column
+-   Fator Data:
+    -   $$F_{Data} =  \left\{\begin{matrix}
+         1,00 \qquad \text{se 2018}\\
+         1,37 \qquad \text{se 2022}
+        \end{matrix}\right.$$
+-   Fator Vagas:
+    -   $$F_{Vagas} = 1,10^{Vagas}$$
+-   Fator Studio:
+    -   $$F_{Studio} = 1,15$$
+- Fator Padrão Construtivo:
+    -   $$F_{PC} =  \left\{\begin{matrix}
+         1,00 \qquad \text{se Baixo}\\
+         1,13 \qquad \text{se Médio}\\
+         1,34 \qquad \text{se Alto }
+        \end{matrix}\right.$$
+:::
+:::
+
+# Homogeneização
+
+-   Para obter o Preço Unitário Homogeneizado de cada imóvel da amostra, deve-se fazer:
+
+-   $$PU_{hom_i} = \frac{PU_i}{F_{Area}.F_{Renda}.F_{Idade}.F_{Suites}.F_{Vagas}.F_{Studio}}$$
+
+## Modelo com variável Andar (aditivo)
+
+```{r}
+veyronHom <- within(na.omit(veyron),{
+  fatorAP <- (AP/100)^coef(fit1)["log(AP/100)"]
+  fatorSuites <- exp(coef(fit1)["Suites"])^Suites
+  fatorVagas <- exp(coef(fit1)["Vagas"])^Vagas
+  fatorPC <- ifelse(PC == "Medio", exp(coef(fit1)["PCMedio"]), 
+                    ifelse(PC == "Alto", exp(coef(fit1)["PCAlto"]),
+                           ifelse(PC == "Baixo", 1, NA)))
+  fatorStudio <- ifelse(Studio == "Nao", 1, exp(coef(fit1)["StudioSim"]))
+  fatorIdade <- exp(coef(fit1)["StudioSim"])^Idade
+  fatorAno <- ifelse(Ano == "_2018", 1, 1.37)
+  fatorRM <- (RendaMedia/7)^(-.44)
+  PUh <- PU/(fatorAP*fatorSuites*fatorVagas*fatorPC*fatorAno*fatorRM)
+})
+```
+
+```{r}
+fitAndar <- lm(PUh ~ Andar, data = veyronHom, subset = -c(16))
+s <- summary(fitAndar)
+fitAndar |>
+  tidy(conf.int = T, conf.level = .80)|>
+  kable(digits = 3, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html",
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",  
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fitAndar$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Modelo com variável Andar (multiplicativo)
+
+```{r}
+fitAndar2 <- lm(log(PUh) ~ log(Andar), 
+                data = veyronHom, subset = -c(16))
+s2 <- summary(fitAndar2)
+fitAndar2 |>
+  tidy(exponentiate = T, conf.int = T, conf.level = .80)|>
+  kable(digits = 3, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",   
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fitAndar2$residuals)), 
+                        paste("R2: ", brf(s2$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s2$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+```{r, eval = FALSE}
+veyronNum <- as.data.frame(
+  cbind(fit1$x, 
+        veyron[-c(15, 67, 76, 116), 
+               c("Andar", "AP", "DBM", "Vagas", "Suites", 
+                 "RendaMedia",  "PU")]
+        )
+  )
+fit2 <- lm(log(PU) ~ offset(.1264*PCMedio) + offset(.2895*PCAlto) +
+             offset(.3184*Ano_2022) + offset(-.0105*Idade) +
+             offset(-.3213*log(AP/100)) + offset(.443*log(RendaMedia)) + 
+             offset(.0968*Vagas) + offset(.138*StudioSim)+
+             offset(.0495*Suites) + I(Andar^2), 
+           data = veyronNum)
+s2 <- summary(fit2)
+fit2 |>
+  tidy()|>
+  kable(digits = 3, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor", 
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit2$residuals)), 
+                        paste("R2: ", brf(s2$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s2$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+# Fatores Aditivos
+
+## Derivação de Fatores Aditivos
+
+- Como observou Gilson Lima:
+
+- Se na avaliação por fatores aditivos, temos:
+
+- $$\hat{PU_i} = \bar{PU}_{hom}.[1 + (F_{1i}-1) + (F_{2i}-1) + \ldots + (F_{ki}-1)]$$
+
+- E na avaliação por regressão múltipla, temos:
+
+- $$\hat{PU_i} = \hat{\beta_0}.+ \hat{\beta_1}X_{1i} + \hat{\beta_2}X_{2i} + \ldots + \hat{\beta_k}X_{ki}$$
+
+- Então: 
+
+- $$\left\{\begin{matrix}
+\hat\beta_0 = \bar{PU}_{hom} \\
+F_{1i}=\hat{\beta_1}/\hat{\beta_0}.X_{1i} \\
+F_{2i}=\hat{\beta_2}/\hat{\beta_0}.X_{2i}  \\
+\cdots \\
+F_{ki}=\hat{\beta_k}/\hat{\beta_0}.X_{ki}
+\end{matrix}\right.$$
+
+- Porém, quem disse que $\hat\beta_0 = \bar{PU}_{hom}$?
+
+- $\hat\beta_0 = \bar{PU}_{hom}$ se, e apenas se, as variáveis de regressão
+estiverem centralizadas nas  características do imóvel avaliando (ou paradigma)!
+
+
+## Modelo minimalista
+
+```{r}
+fit <- lm(PU ~ PC + Ano + Idade + log(AP/100), data = veyron)
+s <- summary(fit)
+fit |>
+  tidy(exponentiate = F, conf.int = T, conf.level = .80) |>
+  kable(digits = 2, 
+        format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",           
+                      "Inf.", "Sup.")) |>
+  footnote(alphabet = c(paste("Dados: ", length(fit$residuals)), 
+                        paste("R2: ", brf(s$r.squared, digits = 2)),
+                        paste("R2aj: ", brf(s$adj.r.squared, digits = 2))
+                        ),
+           escape = F)  |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+## Interpretação das variáveis
+
+- Para a derivação dos fatores, deve-se fazer a derivada parcial da equação de 
+regressão em relação a cada termo. 
+
+- Para a variável `Ano`: 
+
+- $$\frac{\partial PU(PC, Ano, Idade, AP)}{\partial \text{Ano_2022}} = \frac{\partial  3.623,05.\text{Ano_2022}}{\partial \text{Ano_2022}}$$
+
+- $$\partial PU = 3.623,05. \partial  \text{Ano_2022}$$
+
+- Para a variável `Idade`: $$\frac{\partial PU(PC, Ano, Idade, AP)}{\partial \text{Idade}} = \frac{\partial -116,45.\text{Idade}}{\partial \text{Idade}}$$
+
+- $$\partial PU = -116,45 \partial Idade$$
+
+- Para a variável `PC`: analogamente, para o caso da variável `PC`:
+
+- Os imóveis de padrão médio valem R$ 2.048,54/m2 a mais do que os imóveis de 
+padrão baixo, enquanto os imóveis de padrão alto valem R$ 5.151,55/m2 mais do 
+que os imóveis de padrão baixo!
+
+## Interpretação das variáveis
+
+- Para a variável `Area`:
+
+- $$\frac{\partial PU(PC, Ano, Idade, AP)}{\partial AP} = -1.049,06 \frac{\partial log(AP/100)}{\partial AP}$$
+
+- $$\frac{\partial PU}{\partial AP} = -1.049,06\frac{1}{AP}$$
+
+- $$\partial PU = -1.049,06 \frac{\partial AP}{AP}$$
+
+- A interpretação é: o aumento de 1% em `AP` corresponde a uma diminuição de 
+-R$ 10,49 em PU!
+
+- No caso dos modelos aditivos não vale o fator área da forma do fator de 
+Abuhnaman!
+
+## Interpretação das variáveis
+
+
+
+
+## Derivação de Fatores Aditivos
+
+::: columns
+::: column
+- Fator Padrão Construtivo:
+    -   $$F_{PC} =  \left\{\begin{matrix}
+         1,00 \qquad \text{se Baixo}\\
+         1,28 \qquad \text{se Médio}\\
+         1,70 \qquad \text{se Alto }
+        \end{matrix}\right.$$
+-   Fator Idade:
+    -   $$F_{Idade} = -0,016.Idade + 1$$
+-   Fator Ano:
+    -   $$F_{Ano} = \left\{\begin{matrix}
+    1,00 \qquad \text{se Ano = 2018}\\
+    1,49 \qquad \text{se Ano = 2022}
+    \end{matrix}\right.$$
+    
+- Fator Área:
+  
+  - $$F_{Area} = \frac{-1.049,06}{7.311,55}.\ln(AP_{imovel}/AP_{paradigma})+1=-0,14.\ln(AP_{imovel}/100)+1$$
+
+:::
+
+::: column
+-   Aplicação: Se o imóvel paradigma (100m2, ano 2018, idade igual a zero, PC 
+Baixo) tem valor unitário de mercado igual a R$ 7.311,55/m2
+- Quanto vale um apartamento de 200m2, 10 anos de idade, PC Médio no ano de 2022?
+- $$PU_i=7.311,55[1+[(1,28-1)+(0,84-1)+(1,49-1)+(0,9-1)]$$
+- $$PU_i=7.311,55[1+(0,28-0,16+0,49-0,1)]=7.311,55.1,51=11.040,44$$
+
+:::
+:::
+
+## Comparação com previsões do modelo
+
+```{r}
+#| echo: true
+predict(fit, newdata = list(PC = "Medio", Ano = "_2022", Idade = 10, AP = 200))
+```
+
+- Funciona!
+- Porém, deve-se perceber: só funcionou porque o modelo foi ajustado 
+centralizado no imóvel paradigma.
+- Assim, o valor de $\beta_0$ se iguala ao valor do imóvel paradigma
