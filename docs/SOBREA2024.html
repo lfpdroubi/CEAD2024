@@ -8,10 +8,10 @@
 <link href="SOBREA2024_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="SOBREA2024_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="SOBREA2024_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.3.450">
+  <meta name="generator" content="quarto-1.5.57">
 
   <meta name="author" content="Luiz Fernando Palin Droubi">
-  <meta name="dcterms.date" content="2024-10-11">
+  <meta name="dcterms.date" content="2025-03-11">
   <title>Fatores</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -32,7 +32,7 @@
     }
     /* CSS for syntax highlighting */
     pre > code.sourceCode { white-space: pre; position: relative; }
-    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span { line-height: 1.25; }
     pre > code.sourceCode > span:empty { height: 1.2em; }
     .sourceCode { overflow: visible; }
     code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -43,7 +43,7 @@
     }
     @media print {
     pre > code.sourceCode { white-space: pre-wrap; }
-    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
     }
     pre.numberSource code
       { counter-reset: source-line 0; }
@@ -71,7 +71,7 @@
     code span.at { color: #657422; } /* Attribute */
     code span.bn { color: #ad0000; } /* BaseN */
     code span.bu { } /* BuiltIn */
-    code span.cf { color: #003b4f; } /* ControlFlow */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
     code span.ch { color: #20794d; } /* Char */
     code span.cn { color: #8f5902; } /* Constant */
     code span.co { color: #5e5e5e; } /* Comment */
@@ -85,7 +85,7 @@
     code span.fu { color: #4758ab; } /* Function */
     code span.im { color: #00769e; } /* Import */
     code span.in { color: #5e5e5e; } /* Information */
-    code span.kw { color: #003b4f; } /* Keyword */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
     code span.op { color: #5e5e5e; } /* Operator */
     code span.ot { color: #003b4f; } /* Other */
     code span.pp { color: #ad0000; } /* Preprocessor */
@@ -99,6 +99,7 @@
     div.csl-bib-body { }
     div.csl-entry {
       clear: both;
+      margin-bottom: 0em;
     }
     .hanging-indent div.csl-entry {
       margin-left:2em;
@@ -241,7 +242,8 @@
   }
 
   .callout.callout-titled .callout-body > .callout-content > :last-child {
-    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0;
   }
 
   .callout.callout-titled .callout-icon::before {
@@ -404,9 +406,10 @@
       margin-right: 0; 
     }
   </style>
-  
   <script src="SOBREA2024_files/libs/kePrint-0.0.1/kePrint.js"></script>
+
   <link href="SOBREA2024_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
 </head>
 <body class="quarto-light">
   <div class="reveal">
@@ -423,12 +426,31 @@ Luiz Fernando Palin Droubi
 </div>
 </div>
 
-  <p class="date">2024-10-11</p>
+  <p class="date">2025-03-11</p>
 </section>
 <section>
 <section id="introdução" class="title-slide slide level1 center">
 <h1>Introdução</h1>
 
+</section>
+<section id="sobre-a-arte-de-comunicar" class="slide level2 smaller">
+<h2>Sobre a arte de comunicar</h2>
+<blockquote>
+<p>Comunicação não é o que você fala, é o que o outro entende!</p>
+</blockquote>
+<ul>
+<li class="fragment"><p>O Tratamento Científico trouxe <strong>consistência</strong> para a Engenharia de Avaliações</p></li>
+<li class="fragment"><p>O Tratamento por Fatores, contudo, não deixou de ser utilizado</p>
+<ul>
+<li class="fragment">Acredita-se que, em parte, isso se deve à clareza obtida com este tipo de tratamento</li>
+</ul></li>
+<li class="fragment"><p>A consistência alcançada com o Tratamento Científico deu-se a custa de uma perda na clareza da comunicação</p></li>
+<li class="fragment"><p>É possível conciliar?</p>
+<ul>
+<li class="fragment"><span class="citation" data-cites="upav2024">Droubi and Florencio (<a href="#/referências" role="doc-biblioref" onclick="">2024a</a>)</span>, <span class="citation" data-cites="valorem2024Augusto">Oliveira, Bandeira, and Távora (<a href="#/referências" role="doc-biblioref" onclick="">2024</a>)</span>, <span class="citation" data-cites="Cerino2020">Cerino et al. (<a href="#/referências" role="doc-biblioref" onclick="">2020</a>)</span>, <span class="citation" data-cites="trivelloni2005">Trivelloni (<a href="#/referências" role="doc-biblioref" onclick="">2005</a>)</span></li>
+</ul></li>
+<li class="fragment"><p>Há outras vantagens, além da clareza, na utilização do tratamento por fatores?</p></li>
+</ul>
 </section>
 <section id="cobb-douglas" class="slide level2 smaller">
 <h2>Cobb-Douglas</h2>
@@ -448,7 +470,7 @@ Luiz Fernando Palin Droubi
 <section id="cobb-douglas-2" class="slide level2 smaller">
 <h2>Cobb-Douglas (2)</h2>
 <ul>
-<li class="fragment">A hipótese de que o erros é aditivo pode não ser verificada no mercado imobiliário:</li>
+<li class="fragment">A hipótese de que o erro é aditivo pode não ser verificada no mercado imobiliário:</li>
 </ul>
 <div class="fragment">
 <div class="cell">
@@ -465,21 +487,10 @@ Luiz Fernando Palin Droubi
 </section>
 <section id="cobb-douglas-3" class="slide level2 smaller">
 <h2>Cobb-Douglas (3)</h2>
-<ul>
-<li class="fragment">A hipótese dos erros multiplicativos parece mais adequada:</li>
+
+<img data-src="SOBREA2024_files/figure-revealjs/residuosMultiplicativos-1.png" width="960" class="r-stretch quarto-figure-center"><p class="caption">Termo de erro multiplicativo</p><ul>
+<li class="fragment">A hipótese dos erros multiplicativos parece mais adequada!</li>
 </ul>
-<div class="fragment">
-<div class="cell">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SOBREA2024_files/figure-revealjs/residuosMultiplicativos-1.png" width="960"></p>
-<figcaption>Termo de erro multiplicativo</figcaption>
-</figure>
-</div>
-</div>
-</div>
-</div>
 </section>
 <section id="cobb-douglas-4" class="slide level2 smaller">
 <h2>Cobb-Douglas (4)</h2>
@@ -498,7 +509,7 @@ Luiz Fernando Palin Droubi
 
 <img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-10-1.png" width="960" class="r-stretch"><ul>
 <li class="fragment"><p><span class="math inline">\(a = \exp(8,93) \approx 7.560,00;\, b \approx -0,25\)</span></p></li>
-<li class="fragment"><p><span class="math inline">\(PU = 7.560.\left (\frac{Area}{360} \right )^{-0,25} = 7.560.\left (\frac{360}{Area} \right )^{+0,25}\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(PU = 7.560.\left (\frac{Area}{360} \right )^{-0,25} =  7.560.\left (\frac{360}{Area} \right )^{+0,25}\)</span></p></li>
 </ul>
 </section></section>
 <section>
@@ -516,7 +527,7 @@ Luiz Fernando Palin Droubi
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true">
+<table class="caption-top" data-quarto-postprocess="true">
 <caption>Summary Statistics</caption>
 <thead>
 <tr class="header">
@@ -568,13 +579,13 @@ Luiz Fernando Palin Droubi
 <tr class="even">
 <td style="text-align: left;">PU</td>
 <td style="text-align: left;">30</td>
-<td style="text-align: left;">4999</td>
-<td style="text-align: left;">492</td>
-<td style="text-align: left;">4076</td>
-<td style="text-align: left;">4673</td>
-<td style="text-align: left;">4926</td>
-<td style="text-align: left;">5328</td>
-<td style="text-align: left;">5801</td>
+<td style="text-align: left;">2499</td>
+<td style="text-align: left;">246</td>
+<td style="text-align: left;">2038</td>
+<td style="text-align: left;">2336</td>
+<td style="text-align: left;">2463</td>
+<td style="text-align: left;">2664</td>
+<td style="text-align: left;">2900</td>
 </tr>
 </tbody>
 </table>
@@ -593,7 +604,7 @@ Luiz Fernando Palin Droubi
 <h3 id="apenas-casos-completos">Apenas casos completos</h3>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" style="NAborder-bottom: 0;">
+<table class="caption-top" data-quarto-postprocess="true" style="NAborder-bottom: 0;">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -623,12 +634,12 @@ IC (80%)
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">9,46</td>
+<td style="text-align: right;">8,77</td>
 <td style="text-align: right;">0,39</td>
-<td style="text-align: right;">24,03</td>
+<td style="text-align: right;">22,27</td>
 <td style="text-align: right;">0,00</td>
-<td style="text-align: right;">8,92</td>
-<td style="text-align: right;">9,99</td>
+<td style="text-align: right;">8,23</td>
+<td style="text-align: right;">9,30</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">log(Area)</td>
@@ -693,8 +704,8 @@ IC (80%)
 </div>
 </div>
 <ul>
-<li class="fragment"><p>No modelo acima, percebemos que a variável <code>Frente</code> não se mostrou significante.</p></li>
-<li class="fragment"><p>A estimação do modelo ficou prejudicada, provavelmente pelo fato que foi ]possível contar com apenas 15 dados!</p></li>
+<li class="fragment"><p>Variável <code>Frente</code> não se mostrou significante!</p></li>
+<li class="fragment"><p>Por contar com apenas 15 dados completos, a estimação ficou prejudicada!</p></li>
 </ul>
 </section></section>
 <section>
@@ -730,11 +741,11 @@ IC (80%)
 <section id="fator-área-2" class="slide level2 smaller">
 <h2>Fator Área (2)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>fitArea <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(Area<span class="sc">/</span><span class="dv">450</span>), <span class="at">data =</span> dados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a>fitArea <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log</span>(Area<span class="sc">/</span><span class="dv">450</span>), <span class="at">data =</span> dados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<table style="width:100%;" data-quarto-postprocess="true">
+<table class="caption-top" style="width:100%;" data-quarto-postprocess="true">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -764,12 +775,12 @@ IC (80%)
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">8,50</td>
+<td style="text-align: right;">7,81</td>
 <td style="text-align: right;">0,02</td>
-<td style="text-align: right;">529,26</td>
+<td style="text-align: right;">486,11</td>
 <td style="text-align: right;">0</td>
-<td style="text-align: right;">8,48</td>
-<td style="text-align: right;">8,52</td>
+<td style="text-align: right;">7,79</td>
+<td style="text-align: right;">7,83</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">log(Area/450)</td>
@@ -791,22 +802,33 @@ IC (80%)
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#predict(fitArea, newdata = list(Area = 450))</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">exp</span>(<span class="fl">8.50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co">#predict(fitArea, newdata = list(Area = 450))</span></span>
+<span id="cb2-2"><a href=""></a><span class="fu">exp</span>(<span class="fl">7.81</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4914,769</code></pre>
+<pre><code>[1] 2465,13</code></pre>
 </div>
 </div>
 <ul>
 <li class="fragment"><p>Já para um imóvel de 750m2, tem-se: <span class="math inline">\(F_{Area} = (450/750)^{0,15} = 0,926\)</span></p></li>
-<li class="fragment"><p>Para avaliar o valor de mercado do lote de 750 m2: <span class="math inline">\(E[PU|A=750] = 0,926.4.915,00 \approx 4.550,00\)</span></p></li>
+<li class="fragment"><p>Para avaliar o valor de mercado do lote de 750 m2: <span class="math inline">\(E[PU|A=750] = 0,926.2.465=2282,60 \text{ R\$/m}^2\)</span></p></li>
 </ul>
+</div>
+<div class="fragment">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href=""></a><span class="co">#predict(fitArea, newdata = list(Area = 450))</span></span>
+<span id="cb4-2"><a href=""></a>p <span class="ot">&lt;-</span> <span class="fu">predict</span>(fitArea, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">Area =</span> <span class="dv">750</span>))</span>
+<span id="cb4-3"><a href=""></a><span class="fu">exp</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       1 
+2293,954 </code></pre>
+</div>
+</div>
 </div>
 </section>
 <section id="fator-frente" class="slide level2 smaller">
 <h2>Fator Frente</h2>
 
-<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-20-1.png" width="960" class="r-stretch"><ul>
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"><ul>
 <li class="fragment"><p>Dado que não há evidência forte da correlação entre as variáveis <code>PU</code> e <code>Frente</code>, pode-se concluir que a variável <code>Frente</code> não é estatisticamente significante e, portanto, não é necessário o ajuste de um fator frente!</p></li>
 <li class="fragment"><p>Além do mais, um fator frente assim ajustado seria contraditório: quanto maior a frente, menores os preços unitários!</p></li>
 </ul>
@@ -814,7 +836,7 @@ IC (80%)
 <section id="fator-inclinação" class="slide level2 smaller">
 <h2>Fator inclinação</h2>
 
-<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-21-1.png" width="960" class="r-stretch"><ul>
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-22-1.png" width="960" class="r-stretch"><ul>
 <li class="fragment"><p>Para a variável <code>Incl</code>, assim como para <code>Area</code>, há evidência de um efeito sobre <code>PU</code>.</p></li>
 <li class="fragment"><p>Pode-se, assim, ajustar um fator inclinação:</p></li>
 <li class="fragment"><p><span class="math inline">\(F_i = \left (\frac{i_{imovel} + 1}{i_{paradigma} + 1} \right )^{-0,10} = \left (\frac{i_{paradigma} + 1}{i_{imovel} + 1} \right )^{0,10} = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}\)</span></p></li>
@@ -823,11 +845,11 @@ IC (80%)
 <section id="fator-inclinação-2" class="slide level2 smaller">
 <h2>Fator inclinação (2)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>fitIncl <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log1p</span>(Incl), <span class="at">data =</span> dados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href=""></a>fitIncl <span class="ot">&lt;-</span> <span class="fu">lm</span>(<span class="fu">log</span>(PU) <span class="sc">~</span> <span class="fu">log1p</span>(Incl), <span class="at">data =</span> dados)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
-<table style="width:100%;" data-quarto-postprocess="true">
+<table class="caption-top" style="width:100%;" data-quarto-postprocess="true">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -857,12 +879,12 @@ IC (80%)
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">8.65</td>
+<td style="text-align: right;">7.96</td>
 <td style="text-align: right;">0.06</td>
-<td style="text-align: right;">153.36</td>
+<td style="text-align: right;">141.07</td>
 <td style="text-align: right;">0.00</td>
-<td style="text-align: right;">8.58</td>
-<td style="text-align: right;">8.73</td>
+<td style="text-align: right;">7.88</td>
+<td style="text-align: right;">8.03</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">log1p(Incl)</td>
@@ -885,16 +907,16 @@ IC (80%)
 </ol>
 <ul>
 <li class="fragment">O fator também deverá ser aplicado de forma <strong><em>multiplicativa</em></strong>!</li>
-<li class="fragment">Se o lote paradigma (plano) possui valor igual a R$ 5.719,29/m2.</li>
-<li class="fragment">Então um lote com inclinação de 5% possui VM igual a R$ 4.804,20/m2.</li>
+<li class="fragment">Se o lote paradigma (plano) possui valor igual a R$ 2.859,65/m2.</li>
+<li class="fragment">Então um lote com inclinação de 5% possui VM igual a R$ 2.402,10/m2.</li>
 </ul>
 <div class="fragment">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>p <span class="ot">&lt;-</span> <span class="fu">predict</span>(fitIncl, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">Incl =</span> <span class="dv">5</span>))</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">exp</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href=""></a>p <span class="ot">&lt;-</span> <span class="fu">predict</span>(fitIncl, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">Incl =</span> <span class="dv">5</span>))</span>
+<span id="cb7-2"><a href=""></a><span class="fu">exp</span>(p)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1 
-4836.882 </code></pre>
+2418.441 </code></pre>
 </div>
 </div>
 </div>
@@ -910,15 +932,26 @@ IC (80%)
 <section id="efeito-real-da-variável-frente" class="slide level2 smaller">
 <h2>Efeito “real” da variável Frente</h2>
 <ul>
-<li class="fragment">Análise da variável <code>Frente</code> <em>após</em> a homogeneização com os fatores <code>Area</code> e <code>Inclinacao</code>:</li>
+<li class="fragment">Análise da variável <code>Frente</code> <em>após</em> a homogeneização com o fator <code>Area</code>:</li>
 </ul>
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-26-1.png" width="960"></p>
+<div>
+<figure>
+<p><img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-27-1.png" width="960"></p>
+</figure>
 </div>
 </div>
 </div>
+</div>
+</section>
+<section id="efeito-real-da-variável-área" class="slide level2 smaller">
+<h2>Efeito “real” da variável Área</h2>
+
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"><ul>
+<li class="fragment"><span class="math inline">\(R^2\)</span> passou de 0,28 para 0,34! Coeficiente passou de -0,14 para -0,16!</li>
+</ul>
 </section></section>
 <section>
 <section id="correlação-total-parcial-e-semiparcial" class="title-slide slide level1 center">
@@ -929,7 +962,7 @@ IC (80%)
 <h2>Modelo com regressores Area e Frente</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" style="NAborder-bottom: 0;">
+<table class="caption-top" data-quarto-postprocess="true" style="NAborder-bottom: 0;">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -959,12 +992,12 @@ IC (80%)
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">8,50</td>
+<td style="text-align: right;">7,81</td>
 <td style="text-align: right;">0,02</td>
-<td style="text-align: right;">527,12</td>
+<td style="text-align: right;">484,15</td>
 <td style="text-align: right;">0,00</td>
-<td style="text-align: right;">8,48</td>
-<td style="text-align: right;">8,52</td>
+<td style="text-align: right;">7,79</td>
+<td style="text-align: right;">7,83</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">log(Area/450)</td>
@@ -1020,7 +1053,7 @@ IC (80%)
 </div>
 </div>
 <ul>
-<li class="fragment"><p>A retirada da variável <code>Incl</code> do modelo melhora o resultado da estimação dos outros coeficientes (mais dados).</p></li>
+<li class="fragment"><p>A retirada de <code>Incl</code> melhora a estimação dos outros coeficientes (mais dados)!</p></li>
 <li class="fragment"><p>A variável <code>Frente</code>, agora, demonstrou-se significante e com efeito positivo.</p></li>
 <li class="fragment"><p>O coeficiente de determinação diminui bastante com a retirada da variável <code>Incl</code>.</p></li>
 </ul>
@@ -1040,26 +1073,25 @@ IC (80%)
 <div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="refs/Partial.png"></p>
+<p><img data-src="Partial.png"></p>
 <figcaption>Correlação Parcial</figcaption>
 </figure>
 </div>
 </div><div class="column" style="width:50%;">
 <div class="quarto-figure quarto-figure-center">
 <figure>
-<p><img data-src="refs/SemiPartial.png"></p>
+<p><img data-src="SemiPartial.png"></p>
 <figcaption>Correlação Semi-parcial</figcaption>
 </figure>
 </div>
-</div>
-</div>
+</div></div>
 </div>
 </section>
 <section id="correlação-de-ordem-zero-parcial-e-semi-parcial-2" class="slide level2 smaller">
 <h2>Correlação de Ordem Zero, Parcial e Semi-Parcial (2)</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table>
+<table class="caption-top">
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -1103,7 +1135,7 @@ IC (80%)
 <h2>Correlação de Ordem Zero, Parcial e Semi-Parcial (3)</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table>
+<table class="caption-top">
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -1150,7 +1182,7 @@ IC (80%)
 <section id="correlação-entre-área-e-frente" class="slide level2 smaller">
 <h2>Correlação entre Área e Frente</h2>
 
-<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"><ul>
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-33-1.png" width="960" class="r-stretch"><ul>
 <li class="fragment">Existe uma forte correlação entre os regressores!</li>
 </ul>
 </section>
@@ -1160,10 +1192,10 @@ IC (80%)
 <li class="fragment"><p><span class="math inline">\(\ln(PU) = \beta_0 + \beta_1.\ln(Area/450) + \beta_2.\ln(Frente/15) + \varepsilon_1\)</span></p></li>
 <li class="fragment"><p><span class="math inline">\(\ln(Area) = \beta_3 + \beta_4.\ln(Frente/15) + \varepsilon_2\)</span></p></li>
 <li class="fragment"><p><span class="math inline">\(\ln(PU) = \beta_0 + \beta_1\beta_3 + (\beta_1\beta_4 + \beta_2).\ln(Frente/15) + \varepsilon\)</span></p></li>
-<li class="fragment"><p><span class="math inline">\(\ln(PU) = 8,50 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\ln(PU) = 7,81 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1\)</span></p></li>
 <li class="fragment"><p><span class="math inline">\(\ln(Area/450) = -0,01 + 1,27.\ln(Frente) + \varepsilon_2\)</span></p></li>
-<li class="fragment"><p><span class="math inline">\(\hat{\ln(PU)} = 8,50 + (-0,33.1,27 + 0,36).\ln(Frente/15)\)</span></p></li>
-<li class="fragment"><p><span class="math inline">\(\hat{\ln(PU)} = 8,50 - 0,06.\ln(Frente/15)\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\hat{\ln(PU)} = 7,81 + (-0,33.1,27 + 0,36).\ln(Frente/15)\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(\hat{\ln(PU)} = 7,81 - 0,06.\ln(Frente/15)\)</span></p></li>
 <li class="fragment"><p>É por isso que a regressão simples com cada regressor não é, em geral, relevante para o ajuste de fatores de homogeneização!</p></li>
 </ul>
 </section>
@@ -1174,15 +1206,82 @@ IC (80%)
 <li class="fragment">Nos modelos de regressão linear múltipla, o efeito de uma variável é computado após a “homogeneização” da outra!</li>
 </ul>
 </section>
-<section id="derivação-de-fatores-a-partir-da-rlm" class="slide level2">
+<section id="resíduos-parciais" class="slide level2">
+<h2>Resíduos Parciais</h2>
+
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-35-1.png" width="960" class="r-stretch"></section>
+<section id="derivação-de-fatores-a-partir-da-rlm" class="slide level2 smaller">
 <h2>Derivação de Fatores a partir da RLM</h2>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top" style="width:100%;" data-quarto-postprocess="true">
+<colgroup>
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th colspan="5" data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="2" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+IC (80%)
+</div></th>
+</tr>
+<tr class="odd">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Termo</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Est.</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Erro</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Est. t</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">p-valor</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Inf.</th>
+<th style="text-align: right;" data-quarto-table-cell-role="th">Sup.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">7,81</td>
+<td style="text-align: right;">0,02</td>
+<td style="text-align: right;">484,15</td>
+<td style="text-align: right;">0,00</td>
+<td style="text-align: right;">7,79</td>
+<td style="text-align: right;">7,83</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log(Area/450)</td>
+<td style="text-align: right;">-0,33</td>
+<td style="text-align: right;">0,11</td>
+<td style="text-align: right;">-3,09</td>
+<td style="text-align: right;">0,01</td>
+<td style="text-align: right;">-0,47</td>
+<td style="text-align: right;">-0,19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log(Frente/15)</td>
+<td style="text-align: right;">0,36</td>
+<td style="text-align: right;">0,15</td>
+<td style="text-align: right;">2,39</td>
+<td style="text-align: right;">0,03</td>
+<td style="text-align: right;">0,16</td>
+<td style="text-align: right;">0,55</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
 <ul>
-<li class="fragment"><p>O fator Área seria: <span class="math inline">\(F_{Area} = \left ( \frac{450}{A_{imovel}} \right)^{0,33}\)</span></p></li>
-<li class="fragment"><p>O fator Frente seria: <span class="math inline">\(F_{Frente} = \left ( \frac{F_{imovel}}{15} \right)^{0,36}\)</span></p></li>
 <li class="fragment"><p>Os fatores derivados devem ser utilizados na forma <strong><em>multiplicativa</em></strong>!</p>
 <ul>
-<li class="fragment">A equação de estimação será: <span class="math inline">\(PU = 4.915,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}\)</span></li>
+<li class="fragment">A equação de estimação será: <span class="math inline">\(PU = 2.465,00.F_{Area}.F_{Frente}\)</span></li>
 </ul></li>
+<li class="fragment"><p>O fator Área seria: <span class="math inline">\(F_{Area} = \left ( \frac{450}{A_{imovel}} \right)^{0,33}\)</span></p></li>
+<li class="fragment"><p>O fator Frente seria: <span class="math inline">\(F_{Frente} = \left ( \frac{F_{imovel}}{15} \right)^{0,36}\)</span></p></li>
 </ul>
 </section>
 <section id="aplicação-do-fator-incl" class="slide level2 smaller">
@@ -1195,8 +1294,8 @@ IC (80%)
 <ul>
 <li class="fragment">Pode-se aplicar o fator <code>Incl</code>: <span class="math inline">\(F_i = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}\)</span></li>
 <li class="fragment">Assim, o valor de mercado de um lote com <code>Area</code> = 750m, <code>Frente</code> = 25m e <code>Incl</code> igual a 10% é igual a:</li>
-<li class="fragment"><span class="math inline">\(PU = 4915,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}\)</span></li>
-<li class="fragment"><span class="math inline">\(PU = 4915,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx\)</span>R$ 3.947,33</li>
+<li class="fragment"><span class="math inline">\(PU = 2.465,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}\)</span></li>
+<li class="fragment"><span class="math inline">\(PU = 2.465,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx\)</span>R$ 1.973,66</li>
 </ul></li>
 </ul>
 </section></section>
@@ -1208,30 +1307,42 @@ IC (80%)
 <section id="análise-exploratória-1" class="slide level2">
 <h2>Análise Exploratória</h2>
 
-<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-32-1.png" width="960" class="r-stretch"></section>
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-37-1.png" width="960" class="r-stretch"></section>
 <section id="relação-de-inclinação-com-outros-regressores" class="slide level2 smaller">
 <h2>Relação de Inclinação com outros regressores</h2>
-<div id="fig-InclinacaoOthers" class="cell quarto-layout-panel">
-<figure>
-<div class="quarto-layout-row quarto-layout-valign-top">
-<div class="cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-InclinacaoOthers-1" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SOBREA2024_files/figure-revealjs/fig-InclinacaoOthers-1.png" data-ref-parent="fig-InclinacaoOthers" width="960"></p>
-<figcaption>(a) Incl vs.&nbsp;Area</figcaption>
+<div id="fig-InclinacaoOthers" class="quarto-layout-panel">
+<figure class="quarto-float quarto-float-fig">
+<div aria-describedby="fig-InclinacaoOthers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="quarto-layout-row">
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-InclinacaoOthers" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-InclinacaoOthers-1" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-InclinacaoOthers-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="SOBREA2024_files/figure-revealjs/fig-InclinacaoOthers-1.png" data-ref-parent="fig-InclinacaoOthers" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-InclinacaoOthers-1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(a) Incl vs.&nbsp;Area
+</figcaption>
 </figure>
 </div>
 </div>
-<div class="cell-output-display quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
-<div id="fig-InclinacaoOthers-2" class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="SOBREA2024_files/figure-revealjs/fig-InclinacaoOthers-2.png" data-ref-parent="fig-InclinacaoOthers" width="960"></p>
-<figcaption>(b) Incl vs.&nbsp;Frente</figcaption>
+<div class="cell-output-display quarto-layout-cell-subref quarto-layout-cell" data-ref-parent="fig-InclinacaoOthers" style="flex-basis: 50.0%;justify-content: flex-start;">
+<div id="fig-InclinacaoOthers-2" class="quarto-float quarto-figure quarto-figure-center">
+<figure class="quarto-float quarto-subfloat-fig">
+<div aria-describedby="fig-InclinacaoOthers-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img data-src="SOBREA2024_files/figure-revealjs/fig-InclinacaoOthers-2.png" data-ref-parent="fig-InclinacaoOthers" width="960">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-subfloat-caption quarto-subfloat-fig" id="fig-InclinacaoOthers-2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+(b) Incl vs.&nbsp;Frente
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p></p><figcaption>Figure&nbsp;1: Relação da variável Inclinação com outras VE.</figcaption><p></p>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-InclinacaoOthers-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Relação da variável Inclinação com outras VE.
+</figcaption>
 </figure>
 </div>
 <ul>
@@ -1269,7 +1380,11 @@ IC (80%)
 <div class="fragment">
 <div class="cell">
 <div class="cell-output-display">
-<p><img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-35-1.png" width="960"></p>
+<div>
+<figure>
+<p><img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-40-1.png" width="960"></p>
+</figure>
+</div>
 </div>
 </div>
 </div>
@@ -1277,13 +1392,13 @@ IC (80%)
 <section id="aparte-imputação-de-dados-2" class="slide level2">
 <h2>Aparte: imputação de dados (2)</h2>
 
-<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-36-1.png" width="960" class="r-stretch"></section>
+<img data-src="SOBREA2024_files/figure-revealjs/unnamed-chunk-41-1.png" width="960" class="r-stretch"></section>
 <section id="aparte-imputação-de-dados-3" class="slide level2 smaller">
 <h2>Aparte: imputação de dados (3)</h2>
 <h3 id="modelo-com-dados-imputados">Modelo com dados imputados</h3>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" style="NAborder-bottom: 0;">
+<table class="caption-top" data-quarto-postprocess="true" style="NAborder-bottom: 0;">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -1313,12 +1428,12 @@ IC (80%)
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">(Intercept)</td>
-<td style="text-align: right;">8,67</td>
+<td style="text-align: right;">7,97</td>
 <td style="text-align: right;">0,03</td>
-<td style="text-align: right;">261,44</td>
+<td style="text-align: right;">240,54</td>
 <td style="text-align: right;">0,00</td>
-<td style="text-align: right;">8,62</td>
-<td style="text-align: right;">8,71</td>
+<td style="text-align: right;">7,93</td>
+<td style="text-align: right;">8,02</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">log(Area/450)</td>
@@ -1406,14 +1521,14 @@ lm_imp(formula = logPU ~ logArea + logFrente + logIncl, data = dados,
 
 Posterior summary:
                Mean     SD    2.5%   97.5% tail-prob. GR-crit MCE/SD
-(Intercept)  8.6302 0.0445  8.5447  8.7165    0.00000    1.00 0.0285
-logArea     -0.3357 0.1142 -0.5498 -0.1086    0.00933    1.05 0.0717
-logFrente    0.2936 0.1630 -0.0292  0.5923    0.06867    1.04 0.0675
+(Intercept)  7.9370 0.0445  7.8518  8.0233    0.00000    1.00 0.0285
+logArea     -0.3354 0.1144 -0.5496 -0.1086    0.00933    1.06 0.0824
+logFrente    0.2932 0.1630 -0.0292  0.5923    0.06867    1.04 0.0677
 logIncl     -0.0894 0.0302 -0.1451 -0.0337    0.00600    1.00 0.0277
 
 Posterior summary of residual std. deviation:
               Mean     SD   2.5%  97.5% GR-crit MCE/SD
-sigma_logPU 0.0707 0.0157 0.0522 0.0972    1.01 0.0255
+sigma_logPU 0.0707 0.0156 0.0522 0.0974    1.01 0.0256
 
 
 MCMC settings:
@@ -1431,6 +1546,30 @@ Number of observations: 30 </code></pre>
 <section id="fatores-aditivos" class="title-slide slide level1 center">
 <h1>Fatores Aditivos</h1>
 
+</section>
+<section id="introdução-1" class="slide level2 smaller">
+<h2>Introdução</h2>
+<ul>
+<li class="fragment"><p>Os fatores multiplicativos derivam de um modelo multiplicativo</p>
+<ul>
+<li class="fragment"><span class="math inline">\(PU = \beta_0.\exp(\beta_1)^{X_1}\ldots\exp(\beta_k)^{X_k}.\varepsilon\)</span></li>
+</ul></li>
+<li class="fragment"><p>Da mesma maneira, os fatores aditivos, devem ser derivados de um modelo aditivo</p>
+<ul>
+<li class="fragment"><span class="math inline">\(PU = \beta_0+\beta_1X_1 + \ldots + \beta_kX_k + \varepsilon\)</span></li>
+</ul></li>
+<li class="fragment"><p>Apesar do erro dificilmente aparecer no mercado imobiliário na forma aditiva</p></li>
+<li class="fragment"><p>Existem técnicas que permitem o ajustamento de modelos com erros não-constantes</p>
+<ul>
+<li class="fragment">MQP: <span class="citation" data-cites="wls2024">Droubi and Florencio (<a href="#/referências" role="doc-biblioref" onclick="">2024b</a>)</span></li>
+<li class="fragment">Ressuscitando MQP: <span class="citation" data-cites="ROMANO20171">Romano and Wolf (<a href="#/referências" role="doc-biblioref" onclick="">2017</a>)</span></li>
+</ul></li>
+<li class="fragment"><p>Trabalhar na escala original (PU) tem algumas vantagens</p>
+<ul>
+<li class="fragment">Ausência de distorções devido às transformações</li>
+<li class="fragment">Desnecessidade de retransformação da variável</li>
+</ul></li>
+</ul>
 </section>
 <section id="derivação-de-fatores-aditivos" class="slide level2 smaller">
 <h2>Derivação de Fatores Aditivos</h2>
@@ -1460,7 +1599,7 @@ F_{ki}=\hat{\beta_k}/\hat{\beta_0}.X_{ki}
 <h2>Modelo aditivo minimalista</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table data-quarto-postprocess="true" style="NAborder-bottom: 0;">
+<table class="caption-top" data-quarto-postprocess="true" style="NAborder-bottom: 0;">
 <colgroup>
 <col style="width: 14%">
 <col style="width: 14%">
@@ -1584,7 +1723,7 @@ IC (80%)
 <section id="interpretação-das-variáveis" class="slide level2 smaller">
 <h2>Interpretação das variáveis</h2>
 <ul>
-<li class="fragment"><p>Para a derivação dos fatores, deve-se fazer a derivada parcial da equação de regressão em relação a cada termo.</p></li>
+<li class="fragment"><p>Para uma derivação formal dos fatores, podem ser utilizadas as derivadas parciais da equação de regressão em relação a cada termo.</p></li>
 <li class="fragment"><p>Para a variável <code>Ano</code>:</p>
 <ul>
 <li class="fragment"><p><span class="math display">\[\frac{\partial PU(PC, Ano, Idade, AP)}{\partial \text{Ano}} = \frac{\partial  3.623,05.\text{Ano}}{\partial \text{Ano}} = 3.623,05\]</span></p></li>
@@ -1603,9 +1742,8 @@ IC (80%)
 <li class="fragment"><p>Para a variável <code>Area</code>:</p>
 <ul>
 <li class="fragment"><p><span class="math display">\[\frac{\partial PU(PC, Ano, Idade, AP)}{\partial AP} = -1.049,06 \frac{\partial log(AP/100)}{\partial AP}\]</span></p></li>
-<li class="fragment"><p><span class="math display">\[\frac{\partial PU}{\partial AP} = -1.049,06\frac{1}{AP}\]</span></p></li>
-<li class="fragment"><p><span class="math display">\[\therefore \delta PU = -1.049,06 \frac{\delta AP}{AP}\]</span></p></li>
-<li class="fragment"><p>A interpretação é: o aumento de 1% em <code>AP</code> corresponde a uma diminuição de -R$ 10,49 em PU!</p></li>
+<li class="fragment"><p><span class="math display">\[\frac{\partial PU}{\partial AP} = -1.049,06\frac{1}{AP} \Leftrightarrow \delta PU = -1.049,06 \frac{\delta AP}{AP}\]</span></p></li>
+<li class="fragment"><p>O aumento de 1% em <code>AP</code> corresponde a uma diminuição de -R$ 10,49 em PU!</p></li>
 <li class="fragment"><p>Cuidado: a interpretação acima vale para pequenos percentuais de variação!</p></li>
 </ul></li>
 <li class="fragment"><p>O fator área deve ser calculado: <span class="math inline">\(F_{Area} = -1.049,06.\ln(Area/100)\)</span></p>
@@ -1613,18 +1751,20 @@ IC (80%)
 <li class="fragment">Por exemplo: para um imóvel com área igual a 272 <span class="math inline">\(m^2\)</span>:</li>
 <li class="fragment"><span class="math inline">\(F_{Area}=-1.049,06.\ln(272/100) = -1.049,06 \text{ R\$}/m^2\)</span></li>
 </ul></li>
+<li class="fragment"><p>Não é possível utilizar fatores do tipo: <span class="math inline">\(\left(\frac{X_{imóvel}}{X_{paradigma}}\right)^\alpha\)</span> de forma aditiva</p></li>
 </ul>
 </section>
 <section id="derivação-de-fatores-aditivos-1" class="slide level2 smaller">
 <h2>Derivação de Fatores Aditivos</h2>
+<h3 id="com-o-método-de-lima2006-ajustado">Com o método de <span class="citation" data-cites="lima2006">Lima (<a href="#/referências" role="doc-biblioref" onclick="">2006</a>)</span> ajustado</h3>
 <ul>
 <li class="fragment">Fator Padrão Construtivo:
 <ul>
-<li class="fragment"><span class="math display">\[F_{PC} =  \left\{\begin{matrix}
-1,00 \qquad \text{se Baixo}\\
-1,33 \qquad \text{se Médio}\\
-1,84 \qquad \text{se Alto }
-\end{matrix}\right.\]</span></li>
+<li class="fragment"><span class="math display">\[F_{PC} =  \begin{cases}
+  6.147,07/6.147,07 = 1,00 &amp; \text{ se } PC=Baixo \\
+  (6.147,07+2.048,54)/6.147,07 = 1,33 &amp; \text{ se } PC=Medio \\
+  (6.147,07+5.151,55)/6.147,07 = 1,84 &amp; \text{ se } PC=Alto
+  \end{cases}\]</span></li>
 </ul></li>
 <li class="fragment">Fator Idade:
 <ul>
@@ -1632,19 +1772,20 @@ IC (80%)
 </ul></li>
 <li class="fragment">Fator Ano:
 <ul>
-<li class="fragment"><span class="math display">\[F_{Ano} = \left\{\begin{matrix}
-1,00 \qquad \text{se Ano = 2018}\\
-1,59 \qquad \text{se Ano = 2022}
-\end{matrix}\right.\]</span></li>
+<li class="fragment"><span class="math display">\[F_{Ano} =  \begin{cases}
+6.147,07/6.147,07 = 1,00 &amp; \text{ se } Ano = 2018\\
+(6.147,07+3.623,05)/6.147,07 = 1,59 &amp; \text{ se } Ano = 2022
+\end{cases}\]</span></li>
 </ul></li>
 </ul>
 </section>
 <section id="derivação-de-fatores-aditivos-2" class="slide level2 smaller">
 <h2>Derivação de Fatores Aditivos</h2>
+<h3 id="com-o-método-de-lima2006-ajustado-1">Com o método de <span class="citation" data-cites="lima2006">Lima (<a href="#/referências" role="doc-biblioref" onclick="">2006</a>)</span> ajustado</h3>
 <ul>
-<li class="fragment"><p>Fator Área:</p>
+<li class="fragment"><p>Fator AP:</p>
 <ul>
-<li class="fragment"><span class="math display">\[F_{Area} = \frac{-1.049,06}{6.147,07}.\ln(AP_{imovel}/AP_{paradigma})+1=-0,17.\ln(AP_{imovel}/100)+1\]</span></li>
+<li class="fragment"><span class="math display">\[F_{AP} = \frac{-1.049,06}{6.147,07}.\ln(AP_{imovel}/AP_{paradigma})+1=-0,17.\ln(AP_{imovel}/100)+1\]</span></li>
 </ul></li>
 <li class="fragment"><p>Aplicação: Se o imóvel paradigma (100m2, ano 2018, 10 anos de idade, PC Baixo) tem valor unitário de mercado igual a R$ 6.147,07/m2</p></li>
 <li class="fragment"><p>Quanto vale um apartamento de 200m2, 5 anos de idade, PC Médio, no ano de 2022?</p>
@@ -1659,16 +1800,18 @@ IC (80%)
 <section id="comparação-com-previsões-do-modelo" class="slide level2 smaller">
 <h2>Comparação com previsões do modelo</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">PC =</span> <span class="st">"Medio"</span>, <span class="at">Ano =</span> <span class="st">"_2022"</span>, <span class="at">Idade =</span> <span class="dv">5</span>, <span class="at">AP =</span> <span class="dv">200</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href=""></a><span class="fu">predict</span>(fit, <span class="at">newdata =</span> <span class="fu">list</span>(<span class="at">PC =</span> <span class="st">"Medio"</span>, <span class="at">Ano =</span> <span class="st">"_2022"</span>, <span class="at">Idade =</span> <span class="dv">5</span>, <span class="at">AP =</span> <span class="dv">200</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       1 
 11673.75 </code></pre>
 </div>
 </div>
 <ul>
-<li class="fragment">Funciona!</li>
+<li class="fragment">O método de <span class="citation" data-cites="lima2006">Lima (<a href="#/referências" role="doc-biblioref" onclick="">2006</a>)</span> funciona!
+<ul>
 <li class="fragment">Porém, deve-se perceber: só funcionou porque o modelo foi ajustado centralizado no imóvel paradigma.</li>
 <li class="fragment">Assim, o valor de <span class="math inline">\(\beta_0\)</span> se igualou ao valor do imóvel paradigma e permitiu a estimação consistente dos fatores de homogeneização!</li>
+</ul></li>
 </ul>
 </section></section>
 <section>
@@ -1679,30 +1822,73 @@ IC (80%)
 <section id="conclusão-1" class="slide level2 smaller">
 <h2>Conclusão</h2>
 <ul>
+<li class="fragment">Este é um modelo ruim, além de mal comunicado:
+<ul>
+<li class="fragment"><span class="math inline">\(VU = -566,45-3,0555.10^{-9}.A^3 +548,17.\text{SetorUrbano}^{0,5}+143,27.\ln(Frente(\text{qualitativa}))\)</span></li>
+</ul></li>
+<li class="fragment">Este é um bom modelo, porém ainda mal comunicado:
+<ul>
+<li class="fragment"><span class="math inline">\(\hat{\ln(PU)} = 4,768-0,2703.\ln(A) + 0,2339.\ln(\%T)-0,0983.\ln(D)+0,3735.G+0,5186.I + \varepsilon\)</span></li>
+</ul></li>
+<li class="fragment">Este é um bom modelo, porém melhor comunicado:
+<ul>
+<li class="fragment"><span class="math inline">\(\hat{PU} = 117,68.A^{-0,270}.(\%T)^{0,234}.D^{-0,098}.1,45^{G}.1,68^I\)</span></li>
+</ul></li>
+<li class="fragment">A centralização dos dados melhora a comunicação:
+<ul>
+<li class="fragment"><span class="math inline">\(\hat{PU} = 3,10.(A/1500)^{-0,270}.(\%T/25\%)^{0,234}.(D-100)^{-0,098}.1,45^{G}.1,68^I\)</span></li>
+</ul></li>
+<li class="fragment">Argumento que, assim, o modelo poderia ser ainda melhor exposto:
+<ul>
+<li class="fragment"><span class="math inline">\(\hat{PU} = 3,10.F_{Area}.F_{\%Terreo}.F_{Distância}.F_{Garagem}.F_{Idade}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="conclusão-2" class="slide level2 smaller">
+<h2>Conclusão</h2>
+<ul>
+<li class="fragment"><p>Os fatores de homogeneização continuam úteis!</p></li>
+<li class="fragment"><p>Com os novos estudos, agora estão se tornando também, consistentes!</p></li>
 <li class="fragment"><p>A centralização de variáveis é importante para garantir uma estimação consistente dos fatores de homogeneização</p></li>
 <li class="fragment"><p>A independência ou correlação entre os regressores é importante para fins de definir se um fator pode ser ajustado através de uma regressão simples</p></li>
-<li class="fragment"><p>Atenção deve ser dada à forma dos fatores de homogeneização:</p>
-<ul>
-<li class="fragment">Não é possível utilizar fatores do tipo: <span class="math inline">\((X_{imóvel}/X_{paradigma})^\alpha\)</span> de forma aditiva</li>
-</ul></li>
 <li class="fragment"><p>A clareza do Tratamento por Fatores deve ser trazida para o Tratamento Científico</p></li>
 <li class="fragment"><p>E a consistência do Tratamento Científico deve ser levada para o Tratamento por Fatores!</p></li>
 </ul>
 </section>
 <section id="referências" class="slide level2 smaller scrollable">
 <h2>Referências</h2>
+<div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
-<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+</div>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Cerino2020" class="csl-entry" role="listitem">
+Cerino, Rocío Mariel, Juan Pablo Carranza, Mario Andrés Piumetto, María Emilia Bullano, Federico Monzani, and Mariano Augusto Córdoba. 2020. <span>“Homogeneización Del Valor de La Tierra Urbana Mediante Técnicas de Econometría Espacial En Valuaciones Masivas Automatizadas.”</span> <em>14º COBRAC</em>. <a href="https://rdu.unc.edu.ar/handle/11086/28446">https://rdu.unc.edu.ar/handle/11086/28446</a>.
+</div>
+<div id="ref-upav2024" class="csl-entry" role="listitem">
+Droubi, Luiz Fernando Palin, and Lutemberg de Araújo Florencio. 2024a. <span>“Fatores de Homogeneização: Derivação e Uso Racional.”</span> <em>XXXVIII Congresso Pan-Americano UPAV – CHILE 2024</em>. <a href="https://www.upavchile2024.com/">https://www.upavchile2024.com/</a>.
+</div>
+<div id="ref-wls2024" class="csl-entry" role="listitem">
+———. 2024b. <span>“Mínimos Quadrados Ponderados: Vantagens e Aplicação Na Engenharia de Avaliações.”</span> <em>Revista Valorem</em> 1 (1): 33–41. <a href="https://revistavalorem.com/index.php/home/article/view/24">https://revistavalorem.com/index.php/home/article/view/24</a>.
+</div>
 <div id="ref-lima2006" class="csl-entry" role="listitem">
 Lima, Gilson Pereira de Andrade. 2006. <span>“Homogeneização Por Fatores Na Forma Aditiva, Multiplicativa Ou Mista? Imposição Normativa Ou Resposta Do Mercado?”</span> <em>XIII COBREAP</em>.
 </div>
 <div id="ref-doi:10.1080/02664763.2016.1158246" class="csl-entry" role="listitem">
 McNeish, Daniel. 2017. <span>“Missing Data Methods for Arbitrary Missingness with Small Samples.”</span> <em>Journal of Applied Statistics</em> 44 (1): 24–39. <a href="https://doi.org/10.1080/02664763.2016.1158246">https://doi.org/10.1080/02664763.2016.1158246</a>.
 </div>
+<div id="ref-valorem2024Augusto" class="csl-entry" role="listitem">
+Oliveira, Antônio Augusto Ferreira de, Sandro Ricardo Vasconcelos Bandeira, and Victor Jucá Távora. 2024. <span>“Mass Appraisal of Urban Land with Homogenization Factors: A Spatial Models-Based Approach.”</span> <em>Revista Valorem</em> 1 (1): 16–32. <a href="https://revistavalorem.com/index.php/home/article/view/23">https://revistavalorem.com/index.php/home/article/view/23</a>.
+</div>
+<div id="ref-ROMANO20171" class="csl-entry" role="listitem">
+Romano, Joseph P., and Michael Wolf. 2017. <span>“Resurrecting Weighted Least Squares.”</span> <em>Journal of Econometrics</em> 197 (1): 1–19. https://doi.org/<a href="https://doi.org/10.1016/j.jeconom.2016.10.003">https://doi.org/10.1016/j.jeconom.2016.10.003</a>.
+</div>
 <div id="ref-rubin1986" class="csl-entry" role="listitem">
 Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation with Adjusted Weights and Multiple Imputations.”</span> <em>Journal of Business &amp; Economic Statistics</em> 4 (1): 87–94. <a href="https://doi.org/10.1080/07350015.1986.10509497">https://doi.org/10.1080/07350015.1986.10509497</a>.
+</div>
+<div id="ref-trivelloni2005" class="csl-entry" role="listitem">
+Trivelloni, Carlos Alberto Peruzzo. 2005. <span>“Método Para Determinação Do Valor Da Localização Com Uso de Técnicas Inferenciais e Geoestatísticas Na Avaliação Em Massa de Imóveis.”</span> Tese de Doutorado, Florianópolis, SC: Universidade Federal de Santa Catarina.
 </div>
 </div>
 </section></section>
@@ -1732,7 +1918,6 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
       Reveal.initialize({
 'controlsAuto': true,
 'previewLinksAuto': false,
-'smaller': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
 'autoAnimateDuration': 1,
@@ -1918,42 +2103,80 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
       });
     </script>
     
+
     <script>
+
       // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+
       // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+
       // slide changes (different for each slide format).
+
       (function () {
+
         // dispatch for htmlwidgets
+
         function fireSlideEnter() {
+
           const event = window.document.createEvent("Event");
+
           event.initEvent("slideenter", true, true);
+
           window.document.dispatchEvent(event);
+
         }
+
+    
 
         function fireSlideChanged(previousSlide, currentSlide) {
+
           fireSlideEnter();
 
+    
+
           // dispatch for shiny
+
           if (window.jQuery) {
+
             if (previousSlide) {
+
               window.jQuery(previousSlide).trigger("hidden");
+
             }
+
             if (currentSlide) {
+
               window.jQuery(currentSlide).trigger("shown");
+
             }
+
           }
+
         }
+
+    
 
         // hookup for slidy
+
         if (window.w3c_slidy) {
+
           window.w3c_slidy.add_observer(function (slide_num) {
+
             // slide_num starts at position 1
+
             fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+
           });
+
         }
 
+    
+
       })();
+
     </script>
+
+    
 
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
@@ -1987,18 +2210,7 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
         }
         return false;
       }
-      const clipboard = new window.ClipboardJS('.code-copy-button', {
-        text: function(trigger) {
-          const codeEl = trigger.previousElementSibling.cloneNode(true);
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
-            }
-          }
-          return codeEl.innerText;
-        }
-      });
-      clipboard.on('success', function(e) {
+      const onCopySuccess = function(e) {
         // button target
         const button = e.trigger;
         // don't keep focus
@@ -2030,11 +2242,50 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
         }, 1000);
         // clear code selection
         e.clearSelection();
+      }
+      const getTextToCopy = function(trigger) {
+          const codeEl = trigger.previousElementSibling.cloneNode(true);
+          for (const childEl of codeEl.children) {
+            if (isCodeAnnotation(childEl)) {
+              childEl.remove();
+            }
+          }
+          return codeEl.innerText;
+      }
+      const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+        text: getTextToCopy
       });
-      function tippyHover(el, contentFn) {
+      clipboard.on('success', onCopySuccess);
+      if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+        // For code content inside modals, clipBoardJS needs to be initialized with a container option
+        // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+        const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+          text: getTextToCopy,
+          container: window.document.getElementById('quarto-embedded-source-code-modal')
+        });
+        clipboardModal.on('success', onCopySuccess);
+      }
+        var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+        var mailtoRegex = new RegExp(/^mailto:/);
+          var filterRegex = new RegExp('/' + window.location.host + '/');
+        var isInternal = (href) => {
+            return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+        }
+        // Inspect non-navigation links and adorn them if external
+     	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+        for (var i=0; i<links.length; i++) {
+          const link = links[i];
+          if (!isInternal(link.href)) {
+            // undo the damage that might have been done by quarto-nav.js in the case of
+            // links that we want to consider external
+            if (link.dataset.originalHref !== undefined) {
+              link.href = link.dataset.originalHref;
+            }
+          }
+        }
+      function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
         const config = {
           allowHTML: true,
-          content: contentFn,
           maxWidth: 500,
           delay: 100,
           arrow: false,
@@ -2044,8 +2295,17 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
           interactive: true,
           interactiveBorder: 10,
           theme: 'light-border',
-          placement: 'bottom-start'
+          placement: 'bottom-start',
         };
+        if (contentFn) {
+          config.content = contentFn;
+        }
+        if (onTriggerFn) {
+          config.onTrigger = onTriggerFn;
+        }
+        if (onUntriggerFn) {
+          config.onUntrigger = onUntriggerFn;
+        }
           config['offset'] = [0,0];
           config['maxWidth'] = 700;
         window.tippy(el, config); 
@@ -2059,7 +2319,11 @@ Rubin, Donald B. 1986. <span>“Statistical Matching Using File Concatenation wi
           try { href = new URL(href).hash; } catch {}
           const id = href.replace(/^#\/?/, "");
           const note = window.document.getElementById(id);
-          return note.innerHTML;
+          if (note) {
+            return note.innerHTML;
+          } else {
+            return "";
+          }
         });
       }
       const findCites = (el) => {

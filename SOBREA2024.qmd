@@ -37,8 +37,8 @@ library(MASS)
 
 # Data parameters
 n <- 30
-m <- c(450, 15, 4, 5000)
-s <- c(175, 4, 3, 500)
+m <- c(450, 15, 4, 2500)
+s <- c(175, 4, 3, 250)
 ryx1 <- -0.50; ryx2 <- -0.30; ryx3 <- -.40; rx1x2 <- .90; rx1x3 <- 0; rx2x3 <- 0
 
 sigma <- sqrt(log(s^2/m^2 + 1))
@@ -81,6 +81,25 @@ FrenteCoef <- coef(fit)["log(Frente)"]
 
 # Introdução
 
+## Sobre a arte de comunicar {.smaller}
+
+> Comunicação não é o que você fala, é o que o outro entende!
+
+- O Tratamento Científico trouxe **consistência** para a Engenharia de Avaliações
+
+- O Tratamento por Fatores, contudo, não deixou de ser utilizado
+  - Acredita-se que, em parte, isso se deve à clareza obtida com este tipo de 
+  tratamento
+
+- A consistência alcançada com o Tratamento Científico deu-se a custa de uma
+perda na clareza da comunicação
+
+- É possível conciliar?
+  - @upav2024, @valorem2024Augusto, @Cerino2020, @trivelloni2005
+
+- Há outras vantagens, além da clareza, na utilização do tratamento por fatores?
+
+
 ## Cobb-Douglas {.smaller}
 
 - Função de Cobb-Douglas (forma mais simples):
@@ -105,7 +124,7 @@ FrenteCoef <- coef(fit)["log(Frente)"]
 
 ## Cobb-Douglas (2) {.smaller}
 
-- A hipótese de que o erros é aditivo pode não ser verificada no mercado 
+- A hipótese de que o erro é aditivo pode não ser verificada no mercado 
 imobiliário:
 
 . . . 
@@ -116,27 +135,27 @@ imobiliário:
 
 library(ggplot2)
 library(ggthemes)
+library(ggResidpanel)
 theme_set(theme_solarized(base_size = 15))
 data(zilli_2020)
 fitZilli <- lm(PU ~ BRO*log(DABM/100) + PC + I(NG-1) + log(AP/100),
           data = zilli_2020, subset = -204)
-olsrr::ols_plot_resid_stud_fit(fitZilli, threshold = 2.5)
+#olsrr::ols_plot_resid_stud_fit(fitZilli, threshold = 2.5)
+resid_panel(fitZilli)
 ```
 
 ## Cobb-Douglas (3) {.smaller}
-
-- A hipótese dos erros multiplicativos parece mais adequada:
-
-. . . 
 
 ```{r}
 #| label: residuosMultiplicativos
 #| fig-cap: "Termo de erro multiplicativo"
 data(zilli_2020)
 fitZilli1 <- update(fitZilli, log(PU) ~.)
-olsrr::ols_plot_resid_stud_fit(fitZilli1, threshold = 2.5)
+# olsrr::ols_plot_resid_stud_fit(fitZilli1, threshold = 2.5)
+resid_panel(fitZilli1)
 ```
 
+- A hipótese dos erros multiplicativos parece mais adequada!
 
 ## Cobb-Douglas (4) {.smaller}
 
@@ -267,11 +286,9 @@ fit |>
   add_header_above(c(" " = 5, "IC (80%)" = 2))
 ```
 
-- No modelo acima, percebemos que a variável `Frente` não se mostrou 
-significante.
+- Variável `Frente` não se mostrou significante!
 
-- A estimação do modelo ficou prejudicada, provavelmente pelo fato que foi 
-]possível contar com apenas 15 dados!
+- Por contar com apenas 15 dados completos, a estimação ficou prejudicada!
 
 # Análise exploratória
 
@@ -361,14 +378,22 @@ fitArea |>
 ```{r}
 #| echo: true
 #predict(fitArea, newdata = list(Area = 450))
-exp(8.50)
+exp(7.81)
 ```
 
 
 - Já para um imóvel de 750m2, tem-se: $F_{Area} = (450/750)^{0,15} = 0,926$
 
-- Para avaliar o valor de mercado do lote de 750 m2: $E[PU|A=750] = 0,926.4.915,00 \approx 4.550,00$
+- Para avaliar o valor de mercado do lote de 750 m2: $E[PU|A=750] = 0,926.2.465=2282,60 \text{ R\$/m}^2$
 
+. . . 
+
+```{r}
+#| echo: true
+#predict(fitArea, newdata = list(Area = 450))
+p <- predict(fitArea, newdata = list(Area = 750))
+exp(p)
+```
 ## Fator Frente {.smaller}
 
 ```{r}
@@ -456,16 +481,16 @@ também se mostrou insignificante, porém negativo.
 
 ## Efeito "real" da variável Frente {.smaller}
 
-- Análise da variável `Frente` *após* a homogeneização com os
-fatores `Area` e `Inclinacao`:
+- Análise da variável `Frente` *após* a homogeneização com o
+fator `Area`:
 
 . . .
 
 ```{r}
 dados <- within(dados, {
-  FArea <- (450/Area)^.15
-  FIncl <- (1/(Incl + 1))^.10
-  PUhom <- PU/(FArea*FIncl)
+  FArea <- (450/Area)^.14
+#  FIncl <- (1/(Incl + 1))^.10
+  PUhom <- PU/FArea
 })
 ```
 
@@ -491,6 +516,40 @@ p2a +
   labs(caption = "Variável Frente centralizada.")
 ```
 
+## Efeito "real" da variável Área {.smaller}
+
+```{r}
+dados <- within(dados, {
+  FArea <- (450/Area)^.15
+  FFrente <- (Frente/15)^.09
+  PUhom2 <- PU/FFrente
+})
+```
+
+```{r}
+p1a <-
+  ggmice(dados, aes(x = Area/450, y = PUhom2)) +
+  geom_point(size = 2) +
+  stat_poly_line() +
+  # stat_smooth(method="nls", se=FALSE, formula=y~a*log(x/15) + k,
+  #             method.args=list(start=c(a=-100, k=10000))) +
+  theme_solarized(base_size = 15)
+p1a +
+  stat_poly_eq(use_label(c("eq", "R2", "F", "P"), sep = "*\"; \"*"), 
+               formula = y ~ x, 
+               coef.digits = 2, coef.keep.zeros = FALSE, 
+               f.digits = 2, p.digits = 2,
+               eq.with.lhs = "widehat(ln(PU[hom]))~`=`~",
+               eq.x.rhs = ".ln(Area/450)",
+               label.x = "right", label.y = "top", color = "red",
+               size = 5) +
+  scale_y_continuous(transform = "log") +
+  scale_x_continuous(transform = "log", breaks = scales::log_breaks()) +
+  labs(caption = "Variável Frente centralizada.")
+```
+
+- $R^2$ passou de 0,28 para 0,34! Coeficiente passou de -0,14 para -0,16!
+
 # Correlação Total, Parcial e Semiparcial
 
 ## Modelo com regressores Area e Frente {.smaller}
@@ -514,8 +573,7 @@ fit1 |>
   add_header_above(c(" " = 5, "IC (80%)" = 2))
 ```
 
--   A retirada da variável `Incl` do modelo melhora o resultado da estimação dos
-outros coeficientes (mais dados).
+-   A retirada de `Incl` melhora a estimação dos outros coeficientes (mais dados)!
 
 - A variável `Frente`, agora, demonstrou-se significante e com efeito 
 positivo.
@@ -540,11 +598,11 @@ independente e a variável dependente.
 :::: {.columns}
 
 ::: {.column width="50%"}
-![Correlação Parcial](refs/Partial.png)
+![Correlação Parcial](Partial.png)
 :::
 
 ::: {.column width="50%"}
-![Correlação Semi-parcial](refs/SemiPartial.png)
+![Correlação Semi-parcial](SemiPartial.png)
 :::
 
 ::::
@@ -620,13 +678,13 @@ ggmice(dados, aes(x = Frente/15, y = Area/450)) +
 
 -   $\ln(PU) = \beta_0 + \beta_1\beta_3 + (\beta_1\beta_4 + \beta_2).\ln(Frente/15) + \varepsilon$ 
 
--   $\ln(PU) = 8,50 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1$
+-   $\ln(PU) = 7,81 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1$
 
 -   $\ln(Area/450) = -0,01 + 1,27.\ln(Frente) + \varepsilon_2$
 
--   $\hat{\ln(PU)} = 8,50 + (-0,33.1,27 + 0,36).\ln(Frente/15)$
+-   $\hat{\ln(PU)} = 7,81 + (-0,33.1,27 + 0,36).\ln(Frente/15)$
 
--   $\hat{\ln(PU)} = 8,50 - 0,06.\ln(Frente/15)$
+-   $\hat{\ln(PU)} = 7,81 - 0,06.\ln(Frente/15)$
 
 - É por isso que a regressão simples com cada regressor não é, em geral, 
 relevante para o ajuste de fatores de homogeneização!
@@ -653,17 +711,35 @@ p1 + p2
 # p + theme_solarized()
 ```
 
-- Nos modelos de regressão linear múltipla, o efeito de uma variável é computado
-após a "homogeneização" da outra!
+- Nos modelos de regressão linear múltipla, o efeito de uma variável é
+computado após a "homogeneização" da outra!
 
-## Derivação de Fatores a partir da RLM
+## Resíduos Parciais
+
+```{r}
+plotModel(fit1, residuals = T)
+```
+
+
+## Derivação de Fatores a partir da RLM {.smaller}
+
+```{r}
+fit1 |>
+  tidy(conf.int = T, conf.level = .80) |>
+  kable(digits = 2, format.args = list(big.mark = ".", decimal.mark = ","),
+        format = "html", 
+        col.names = c("Termo", "Est.", "Erro", "Est. t", "p-valor",
+                      "Inf.", "Sup.")) |>
+  add_header_above(c(" " = 5, "IC (80%)" = 2))
+```
+
+
+- Os fatores derivados devem ser utilizados na forma **_multiplicativa_**!
+  - A equação de estimação será: $PU = 2.465,00.F_{Area}.F_{Frente}$
 
 - O fator Área seria: $F_{Area} = \left ( \frac{450}{A_{imovel}} \right)^{0,33}$
 
 - O fator Frente seria: $F_{Frente} = \left ( \frac{F_{imovel}}{15} \right)^{0,36}$
-
-- Os fatores derivados devem ser utilizados na forma **_multiplicativa_**!
-  - A equação de estimação será: $PU = 4.915,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}$
 
 ## Aplicação do Fator `Incl` {.smaller}
 
@@ -681,8 +757,8 @@ o efeito desta variável não pode ser simplesmente ignorado!
   - Pode-se aplicar o fator `Incl`: $F_i = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$
   - Assim, o valor de mercado de um lote com `Area` = 750m, `Frente` = 25m e
   `Incl` igual a 10% é igual a: 
-  - $PU = 4915,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$ 
-  - $PU = 4915,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx$`r Reais(exp(coef(fit1)[1])*.845*1.2*.79)`
+  - $PU = 2.465,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$ 
+  - $PU = 2.465,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx$`r Reais(exp(coef(fit1)[1])*.845*1.2*.79)`
 
 # Reflexões
 
@@ -855,6 +931,25 @@ summary(ImpFit1)
     
 # Fatores Aditivos
 
+## Introdução {.smaller}
+
+- Os fatores multiplicativos derivam de um modelo multiplicativo 
+  - $PU = \beta_0.\exp(\beta_1)^{X_1}\ldots\exp(\beta_k)^{X_k}.\varepsilon$
+
+- Da mesma maneira, os fatores aditivos, devem ser derivados de um modelo
+aditivo 
+  - $PU = \beta_0+\beta_1X_1 + \ldots + \beta_kX_k + \varepsilon$
+
+- Apesar do erro dificilmente aparecer no mercado imobiliário na forma aditiva
+
+- Existem técnicas que permitem o ajustamento de modelos com erros não-constantes
+  - MQP: @wls2024
+  - Ressuscitando MQP: @ROMANO20171
+  
+- Trabalhar na escala original (PU) tem algumas vantagens
+  - Ausência de distorções devido às transformações
+  - Desnecessidade de retransformação da variável
+
 ## Derivação de Fatores Aditivos {.smaller}
 
 - Como bem observou @lima2006, se na avaliação por fatores aditivos, temos:
@@ -914,8 +1009,8 @@ $\hat\beta_0 = \bar{PU}_{hom}$!
 
 ## Interpretação das variáveis {.smaller}
 
-- Para a derivação dos fatores, deve-se fazer a derivada parcial da equação de 
-regressão em relação a cada termo. 
+- Para uma derivação formal dos fatores, podem ser utilizadas as derivadas 
+parciais da equação de regressão em relação a cada termo. 
 
 - Para a variável `Ano`: 
 
@@ -937,38 +1032,43 @@ $F_{Idade} = -116,45.(-5) = +582,25$
 
   - $$\frac{\partial PU(PC, Ano, Idade, AP)}{\partial AP} = -1.049,06 \frac{\partial log(AP/100)}{\partial AP}$$
 
-  - $$\frac{\partial PU}{\partial AP} = -1.049,06\frac{1}{AP}$$
+  - $$\frac{\partial PU}{\partial AP} = -1.049,06\frac{1}{AP} \Leftrightarrow \delta PU = -1.049,06 \frac{\delta AP}{AP}$$
 
-  - $$\therefore \delta PU = -1.049,06 \frac{\delta AP}{AP}$$
-
-  - A interpretação é: o aumento de 1% em `AP` corresponde a uma diminuição de 
-  -R$ 10,49 em PU!
+  - O aumento de 1% em `AP` corresponde a uma diminuição de -R$ 10,49 em PU!
   - Cuidado: a interpretação acima vale para pequenos percentuais de variação!
 
 - O fator área deve ser calculado: $F_{Area} = -1.049,06.\ln(Area/100)$
   - Por exemplo: para um imóvel com área igual a 272 $m^2$:
   - $F_{Area}=-1.049,06.\ln(272/100) = -1.049,06 \text{ R\$}/m^2$
 
+- Não é possível utilizar fatores do tipo: $\left(\frac{X_{imóvel}}{X_{paradigma}}\right)^\alpha$ 
+de forma aditiva
+
 ## Derivação de Fatores Aditivos {.smaller}
 
+### Com o método de @lima2006 ajustado
+
 - Fator Padrão Construtivo:
-    -   $$F_{PC} =  \left\{\begin{matrix}
-         1,00 \qquad \text{se Baixo}\\
-         1,33 \qquad \text{se Médio}\\
-         1,84 \qquad \text{se Alto }
-        \end{matrix}\right.$$
+    -   $$F_{PC} =  \begin{cases}
+    6.147,07/6.147,07 = 1,00 & \text{ se } PC=Baixo \\
+    (6.147,07+2.048,54)/6.147,07 = 1,33 & \text{ se } PC=Medio \\
+    (6.147,07+5.151,55)/6.147,07 = 1,84 & \text{ se } PC=Alto 
+    \end{cases}$$
 -   Fator Idade:
     -   $$F_{Idade} = -0,019.(Idade-10) + 1$$
 -   Fator Ano:
-    -   $$F_{Ano} = \left\{\begin{matrix}
-    1,00 \qquad \text{se Ano = 2018}\\
-    1,59 \qquad \text{se Ano = 2022}
-    \end{matrix}\right.$$
+    -   $$F_{Ano} =  \begin{cases}
+    6.147,07/6.147,07 = 1,00 & \text{ se } Ano = 2018\\
+    (6.147,07+3.623,05)/6.147,07 = 1,59 & \text{ se } Ano = 2022
+    \end{cases}$$
     
 ## Derivação de Fatores Aditivos {.smaller}
-- Fator Área:
+
+### Com o método de @lima2006 ajustado
+
+- Fator AP:
   
-  - $$F_{Area} = \frac{-1.049,06}{6.147,07}.\ln(AP_{imovel}/AP_{paradigma})+1=-0,17.\ln(AP_{imovel}/100)+1$$
+  - $$F_{AP} = \frac{-1.049,06}{6.147,07}.\ln(AP_{imovel}/AP_{paradigma})+1=-0,17.\ln(AP_{imovel}/100)+1$$
 
 -   Aplicação: Se o imóvel paradigma (100m2, ano 2018, 10 anos de idade, PC 
 Baixo) tem valor unitário de mercado igual a R$ 6.147,07/m2
@@ -980,30 +1080,74 @@ Baixo) tem valor unitário de mercado igual a R$ 6.147,07/m2
 
 ## Comparação com previsões do modelo {.smaller}
 
+
 ```{r}
 #| echo: true
 predict(fit, newdata = list(PC = "Medio", Ano = "_2022", Idade = 5, AP = 200))
 ```
 
-- Funciona!
-- Porém, deve-se perceber: só funcionou porque o modelo foi ajustado 
-centralizado no imóvel paradigma.
-- Assim, o valor de $\beta_0$ se igualou ao valor do imóvel paradigma e permitiu
-a estimação consistente dos fatores de homogeneização!
+- O método de @lima2006 funciona!
+  - Porém, deve-se perceber: só funcionou porque o modelo foi ajustado
+  centralizado no imóvel paradigma.
+  - Assim, o valor de $\beta_0$ se igualou ao valor do imóvel paradigma e
+  permitiu a estimação consistente dos fatores de homogeneização!
 
 # Conclusão
 
+```{r, eval = FALSE}
+library(readxl)
+
+df <- read_excel("data/dados.xlsx")
+
+colnames(df) <- c("Id", "Endereço", "Complemento", "Area", "PercentualTerreno",
+                  "Distancia", "Garagem", "Idade", "PU")
+
+
+df <- within(df, {
+  Garagem <- ifelse(Garagem == 1, " Sim", " Não")
+  # Idade <- ifelse(Idade == 1, " <= 10 anos", " > 10 anos")
+  Idade <- factor(Idade, levels = c(0, 1), labels = c(" > 10 anos", " <= 10 anos"))
+  ATerreo <- Area*PercentualTerreno/100
+  ASuperiores <- Area*(1-PercentualTerreno/100)
+  Relacao <- ASuperiores/ATerreo
+})
+
+# write.table(df, file = "EC/dados.tsv", row.names=FALSE, sep="\t")
+
+
+fit <- lm(log(PU) ~ log(Area/1500) + log(PercentualTerreno/25) +
+            log(Distancia/100) + Garagem + Idade, data = df)
+summary(fit)
+```
+
 ## Conclusão {.smaller}
+
+- Este é um modelo ruim, além de mal comunicado:
+  - $VU = -566,45-3,0555.10^{-9}.A^3 +548,17.\text{SetorUrbano}^{0,5}+143,27.\ln(Frente(\text{qualitativa}))$
+
+- Este é um bom modelo, porém ainda mal comunicado:
+  - $\hat{\ln(PU)} = 4,768-0,2703.\ln(A) + 0,2339.\ln(\%T)-0,0983.\ln(D)+0,3735.G+0,5186.I + \varepsilon$
+
+- Este é um bom modelo, porém melhor comunicado:
+  - $\hat{PU} = 117,68.A^{-0,270}.(\%T)^{0,234}.D^{-0,098}.1,45^{G}.1,68^I$
+  
+- A centralização dos dados melhora a comunicação:
+  - $\hat{PU} = 3,10.(A/1500)^{-0,270}.(\%T/25\%)^{0,234}.(D-100)^{-0,098}.1,45^{G}.1,68^I$
+  
+- Argumento que, assim, o modelo poderia ser ainda melhor exposto:
+  - $\hat{PU} = 3,10.F_{Area}.F_{\%Terreo}.F_{Distância}.F_{Garagem}.F_{Idade}$
+
+## Conclusão {.smaller}
+
+- Os fatores de homogeneização continuam úteis!
+
+- Com os novos estudos, agora estão se tornando também, consistentes!
 
 - A centralização de variáveis é importante para garantir uma estimação 
 consistente dos fatores de homogeneização
 
 - A independência ou correlação entre os regressores é importante para fins de
 definir se um fator pode ser ajustado através de uma regressão simples
-
-- Atenção deve ser dada à forma dos fatores de homogeneização:
-  - Não é possível utilizar fatores do tipo: $(X_{imóvel}/X_{paradigma})^\alpha$ 
-de forma aditiva
 
 - A clareza do Tratamento por Fatores deve ser trazida para o Tratamento Científico 
 

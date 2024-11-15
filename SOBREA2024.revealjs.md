@@ -1,7 +1,7 @@
 ---
 title: "Fatores"
 author: "Luiz Fernando Palin Droubi"
-date: "14/11/2024"
+date: "15/11/2024"
 format:
   revealjs:
     theme: beige
@@ -27,6 +27,7 @@ prefer-html: true
 ::: {.cell}
 
 :::
+
 
 
 # Introdução
@@ -80,6 +81,7 @@ imobiliário:
 . . . 
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
 ![Termo de erro aditivo.](SOBREA2024_files/figure-revealjs/residuosAditivos-1.png){width=960}
@@ -87,7 +89,9 @@ imobiliário:
 :::
 
 
+
 ## Cobb-Douglas (3) {.smaller}
+
 
 
 ::: {.cell}
@@ -97,9 +101,11 @@ imobiliário:
 :::
 
 
+
 - A hipótese dos erros multiplicativos parece mais adequada!
 
 ## Cobb-Douglas (4) {.smaller}
+
 
 
 ::: {.cell}
@@ -113,7 +119,9 @@ imobiliário:
 :::
 
 
+
 ## Cobb-Douglas (5) {.smaller}
+
 
 
 ::: {.cell}
@@ -123,6 +131,7 @@ imobiliário:
 :::
 
 
+
 - $a = \exp(10,4) \approx 32.860,00;\, b \approx -0,25$
 
 - $PU = 32.860,00.Area^{-0,25}$
@@ -130,11 +139,13 @@ imobiliário:
 ## Cobb-Douglas (6) {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
 ![](SOBREA2024_files/figure-revealjs/unnamed-chunk-10-1.png){width=960}
 :::
 :::
+
 
 
 - $a = \exp(8,93) \approx 7.560,00;\, b \approx -0,25$
@@ -153,6 +164,7 @@ imobiliário:
 `Frente` e a variável `Incl` (inclinação da superfície do terreno).
 
 . . . 
+
 
 
 ::: {.cell}
@@ -211,13 +223,13 @@ imobiliário:
   <tr>
    <td style="text-align:left;"> PU </td>
    <td style="text-align:left;"> 30 </td>
-   <td style="text-align:left;"> 4999 </td>
-   <td style="text-align:left;"> 492 </td>
-   <td style="text-align:left;"> 4076 </td>
-   <td style="text-align:left;"> 4673 </td>
-   <td style="text-align:left;"> 4926 </td>
-   <td style="text-align:left;"> 5328 </td>
-   <td style="text-align:left;"> 5801 </td>
+   <td style="text-align:left;"> 2499 </td>
+   <td style="text-align:left;"> 246 </td>
+   <td style="text-align:left;"> 2038 </td>
+   <td style="text-align:left;"> 2336 </td>
+   <td style="text-align:left;"> 2463 </td>
+   <td style="text-align:left;"> 2664 </td>
+   <td style="text-align:left;"> 2900 </td>
   </tr>
 </tbody>
 </table>
@@ -228,12 +240,14 @@ imobiliário:
 :::
 
 
+
 - Nota-se que existem apenas 25 dados com a variável `Frente`.
 - E que existem apenas 20 dados com a variável `Incl`.
 
 ## Modelo de Regressão Múltipla {.smaller}
 
 ### Apenas casos completos 
+
 
 
 ::: {.cell}
@@ -259,12 +273,12 @@ imobiliário:
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 9,46 </td>
+   <td style="text-align:right;"> 8,77 </td>
    <td style="text-align:right;"> 0,39 </td>
-   <td style="text-align:right;"> 24,03 </td>
+   <td style="text-align:right;"> 22,27 </td>
    <td style="text-align:right;"> 0,00 </td>
-   <td style="text-align:right;"> 8,92 </td>
-   <td style="text-align:right;"> 9,99 </td>
+   <td style="text-align:right;"> 8,23 </td>
+   <td style="text-align:right;"> 9,30 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log(Area) </td>
@@ -310,6 +324,7 @@ imobiliário:
 :::
 
 
+
 - Variável `Frente` não se mostrou significante!
 
 - Por contar com apenas 15 dados completos, a estimação ficou prejudicada!
@@ -319,6 +334,7 @@ imobiliário:
 ## Variável Área
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
 ![](SOBREA2024_files/figure-revealjs/unnamed-chunk-13-1.png){width=960}
@@ -326,7 +342,9 @@ imobiliário:
 :::
 
 
+
 ## Variável Frente
+
 
 
 ::: {.cell}
@@ -336,7 +354,9 @@ imobiliário:
 :::
 
 
+
 ## Variável Inclinação
+
 
 
 ::: {.cell}
@@ -346,9 +366,11 @@ imobiliário:
 :::
 
 
+
 # Derivação de Fatores
 
 ## Fator Área {.smaller}
+
 
 
 ::: {.cell}
@@ -358,11 +380,13 @@ imobiliário:
 :::
 
 
+
 -   Dado que a área tem correlação com a variável PU, na forma log-log, pode-se assim ajustar um fator área:
 
 -   $$F_a = \left ( \frac{A_{imovel}}{A_{paradigma}} \right)^{-0,15} = \left ( \frac{A_{paradigma}}{A_{imovel}} \right)^{0,15} = \left ( \frac{450}{A_{imovel}} \right)^{0,15}$$
 
 ## Fator Área (2) {.smaller}
+
 
 
 ::: {.cell}
@@ -395,12 +419,12 @@ fitArea <- lm(log(PU) ~ log(Area/450), data = dados)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 8,50 </td>
+   <td style="text-align:right;"> 7,81 </td>
    <td style="text-align:right;"> 0,02 </td>
-   <td style="text-align:right;"> 529,26 </td>
+   <td style="text-align:right;"> 486,11 </td>
    <td style="text-align:right;"> 0 </td>
-   <td style="text-align:right;"> 8,48 </td>
-   <td style="text-align:right;"> 8,52 </td>
+   <td style="text-align:right;"> 7,79 </td>
+   <td style="text-align:right;"> 7,83 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log(Area/450) </td>
@@ -422,39 +446,71 @@ fitArea <- lm(log(PU) ~ log(Area/450), data = dados)
 
 
 
+
 - De acordo com o modelo acima, um imóvel paradigma (`Area` = 450m2), tem VM de:
 
 . . .
+
 
 
 ::: {.cell}
 
 ```{.r .cell-code}
 #predict(fitArea, newdata = list(Area = 450))
-exp(8.50)
+exp(7.81)
 ```
 
 ::: {.cell-output .cell-output-stdout}
+
 ```
-[1] 4914,769
+[1] 2465,13
 ```
+
+
 :::
 :::
+
 
 
 
 - Já para um imóvel de 750m2, tem-se: $F_{Area} = (450/750)^{0,15} = 0,926$
 
-- Para avaliar o valor de mercado do lote de 750 m2: $E[PU|A=750] = 0,926.4.915,00 \approx 4.550,00$
+- Para avaliar o valor de mercado do lote de 750 m2: $E[PU|A=750] = 0,926.2.465=2282,60 \text{ R\$/m}^2$
+
+. . . 
+
+
+
+::: {.cell}
+
+```{.r .cell-code}
+#predict(fitArea, newdata = list(Area = 450))
+p <- predict(fitArea, newdata = list(Area = 750))
+exp(p)
+```
+
+::: {.cell-output .cell-output-stdout}
+
+```
+       1 
+2293,954 
+```
+
+
+:::
+:::
+
 
 ## Fator Frente {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-20-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-21-1.png){width=960}
 :::
 :::
+
 
 
 -   Dado que não há evidência forte da correlação entre as variáveis `PU` e 
@@ -467,11 +523,13 @@ maior a frente, menores os preços unitários!
 ## Fator inclinação {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-21-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-22-1.png){width=960}
 :::
 :::
+
 
 
 -   Para a variável `Incl`, assim como para `Area`, há evidência
@@ -482,6 +540,7 @@ de um efeito sobre `PU`.
 -   $F_i = \left (\frac{i_{imovel} + 1}{i_{paradigma} + 1} \right )^{-0,10} = \left (\frac{i_{paradigma} + 1}{i_{imovel} + 1} \right )^{0,10} = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$
 
 ## Fator inclinação (2) {.smaller}
+
 
 
 ::: {.cell}
@@ -514,12 +573,12 @@ fitIncl <- lm(log(PU) ~ log1p(Incl), data = dados)
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 8.65 </td>
+   <td style="text-align:right;"> 7.96 </td>
    <td style="text-align:right;"> 0.06 </td>
-   <td style="text-align:right;"> 153.36 </td>
+   <td style="text-align:right;"> 141.07 </td>
    <td style="text-align:right;"> 0.00 </td>
-   <td style="text-align:right;"> 8.58 </td>
-   <td style="text-align:right;"> 8.73 </td>
+   <td style="text-align:right;"> 7.88 </td>
+   <td style="text-align:right;"> 8.03 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log1p(Incl) </td>
@@ -539,16 +598,18 @@ fitIncl <- lm(log(PU) ~ log1p(Incl), data = dados)
 :::
 
 
+
 1. Para o lote paradigma (plano): $F_i = \left( \frac{1}{0+1}\right)^{0,10}=1,0$
 2. Para um lote com inclinação igual a 5%: $F_i = \left( \frac{1}{5+1}\right)^{0,10}=0,84$
 
 - O fator também deverá ser aplicado de forma **_multiplicativa_**!
 - Se o lote paradigma (plano) possui valor igual a 
-R$ 5.719,29/m2.
+R$ 2.859,65/m2.
 - Então um lote com inclinação de 5% possui VM igual a
-R$ 4.804,20/m2.
+R$ 2.402,10/m2.
 
 . . .
+
 
 
 ::: {.cell}
@@ -559,12 +620,16 @@ exp(p)
 ```
 
 ::: {.cell-output .cell-output-stdout}
+
 ```
        1 
-4836.882 
+2418.441 
 ```
+
+
 :::
 :::
+
 
 
 ## Reflexões
@@ -585,29 +650,33 @@ fator `Area`:
 . . .
 
 
+
 ::: {.cell}
 
 :::
 
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-26-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-27-1.png){width=960}
 :::
 :::
+
 
 
 ## Efeito "real" da variável Área {.smaller}
 
 
+
 ::: {.cell}
 
 :::
 
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-28-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-29-1.png){width=960}
 :::
 :::
+
 
 
 - $R^2$ passou de 0,28 para 0,34! Coeficiente passou de -0,14 para -0,16!
@@ -615,6 +684,7 @@ fator `Area`:
 # Correlação Total, Parcial e Semiparcial
 
 ## Modelo com regressores Area e Frente {.smaller}
+
 
 
 ::: {.cell}
@@ -640,12 +710,12 @@ fator `Area`:
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 8,50 </td>
+   <td style="text-align:right;"> 7,81 </td>
    <td style="text-align:right;"> 0,02 </td>
-   <td style="text-align:right;"> 527,12 </td>
+   <td style="text-align:right;"> 484,15 </td>
    <td style="text-align:right;"> 0,00 </td>
-   <td style="text-align:right;"> 8,48 </td>
-   <td style="text-align:right;"> 8,52 </td>
+   <td style="text-align:right;"> 7,79 </td>
+   <td style="text-align:right;"> 7,83 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log(Area/450) </td>
@@ -680,6 +750,7 @@ fator `Area`:
 
 :::
 :::
+
 
 
 -   A retirada de `Incl` melhora a estimação dos outros coeficientes (mais dados)!
@@ -719,14 +790,20 @@ independente e a variável dependente.
 ## Correlação de Ordem Zero, Parcial e Semi-Parcial (2) {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
+
+
 |               | Zero-order| Partial|  Part|
 |:--------------|----------:|-------:|-----:|
 |log(Area/450)  |      -0,39|   -0,55| -0,54|
 |log(Frente/15) |      -0,19|    0,45|  0,42|
+
+
 :::
 :::
+
 
 
 - Na tabela acima são vistas a correlação de ordem zero, a parcial e a 
@@ -748,14 +825,20 @@ de explicação que ela **adiciona** ao modelo!
 ## Correlação de Ordem Zero, Parcial e Semi-Parcial (3) {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
+
+
 |               | Zero-order| Partial|  Part|
 |:--------------|----------:|-------:|-----:|
 |log(Area/450)  |      -0,39|   -0,55| -0,54|
 |log(Frente/15) |      -0,19|    0,45|  0,42|
+
+
 :::
 :::
+
 
 
 - A correlação da variável `Area` com relação à PU era fraca ($r = -0,39$)
@@ -776,11 +859,13 @@ regressor, é denominado de **Paradoxo de Simpson**!
 ## Correlação entre Área e Frente {.smaller}
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-32-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-33-1.png){width=960}
 :::
 :::
+
 
 
 - Existe uma forte correlação entre os regressores!
@@ -793,18 +878,19 @@ regressor, é denominado de **Paradoxo de Simpson**!
 
 -   $\ln(PU) = \beta_0 + \beta_1\beta_3 + (\beta_1\beta_4 + \beta_2).\ln(Frente/15) + \varepsilon$ 
 
--   $\ln(PU) = 8,50 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1$
+-   $\ln(PU) = 7,81 - 0,33.\ln(Area/450) + 0,36\ln(Frente/15) + \varepsilon_1$
 
 -   $\ln(Area/450) = -0,01 + 1,27.\ln(Frente) + \varepsilon_2$
 
--   $\hat{\ln(PU)} = 8,50 + (-0,33.1,27 + 0,36).\ln(Frente/15)$
+-   $\hat{\ln(PU)} = 7,81 + (-0,33.1,27 + 0,36).\ln(Frente/15)$
 
--   $\hat{\ln(PU)} = 8,50 - 0,06.\ln(Frente/15)$
+-   $\hat{\ln(PU)} = 7,81 - 0,06.\ln(Frente/15)$
 
 - É por isso que a regressão simples com cada regressor não é, em geral, 
 relevante para o ajuste de fatores de homogeneização!
 
 ## Paradoxo de Simpson (2)
+
 
 
 ::: {.cell}
@@ -814,11 +900,25 @@ relevante para o ajuste de fatores de homogeneização!
 :::
 
 
+
 - Nos modelos de regressão linear múltipla, o efeito de uma variável é
 computado após a "homogeneização" da outra!
 
+## Resíduos Parciais
+
+
+
+::: {.cell}
+::: {.cell-output-display}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-35-1.png){width=960}
+:::
+:::
+
+
+
 
 ## Derivação de Fatores a partir da RLM {.smaller}
+
 
 
 ::: {.cell}
@@ -844,12 +944,12 @@ computado após a "homogeneização" da outra!
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 8,50 </td>
+   <td style="text-align:right;"> 7,81 </td>
    <td style="text-align:right;"> 0,02 </td>
-   <td style="text-align:right;"> 527,12 </td>
+   <td style="text-align:right;"> 484,15 </td>
    <td style="text-align:right;"> 0,00 </td>
-   <td style="text-align:right;"> 8,48 </td>
-   <td style="text-align:right;"> 8,52 </td>
+   <td style="text-align:right;"> 7,79 </td>
+   <td style="text-align:right;"> 7,83 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log(Area/450) </td>
@@ -879,8 +979,9 @@ computado após a "homogeneização" da outra!
 
 
 
+
 - Os fatores derivados devem ser utilizados na forma **_multiplicativa_**!
-  - A equação de estimação será: $PU = 4.915,00.F_{Area}.F_{Frente}$
+  - A equação de estimação será: $PU = 2.465,00.F_{Area}.F_{Frente}$
 
 - O fator Área seria: $F_{Area} = \left ( \frac{450}{A_{imovel}} \right)^{0,33}$
 
@@ -902,22 +1003,25 @@ o efeito desta variável não pode ser simplesmente ignorado!
   - Pode-se aplicar o fator `Incl`: $F_i = \left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$
   - Assim, o valor de mercado de um lote com `Area` = 750m, `Frente` = 25m e
   `Incl` igual a 10% é igual a: 
-  - $PU = 4915,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$ 
-  - $PU = 4915,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx$R$ 3.947,33
+  - $PU = 2.465,00.\left ( \frac{450}{A_{imovel}} \right)^{0,33}.\left ( \frac{F_{imovel}}{15} \right)^{0,36}.\left (\frac{1}{i_{imovel} + 1} \right )^{0,10}$ 
+  - $PU = 2.465,00.\left ( \frac{450}{750} \right)^{0,33}.\left ( \frac{25}{15} \right)^{0,36}.\left (\frac{1}{10 + 1} \right )^{0,10} \approx$R$ 1.973,66
 
 # Reflexões
 
 ## Análise Exploratória
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-35-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-37-1.png){width=960}
 :::
 :::
+
 
 
 ## Relação de Inclinação com outros regressores {.smaller}
+
 
 
 ::: {#fig-InclinacaoOthers .cell layout-ncol="2"}
@@ -931,6 +1035,7 @@ o efeito desta variável não pode ser simplesmente ignorado!
 
 Relação da variável Inclinação com outras VE.
 :::
+
 
 
 - Não há, na prática, qualquer relação entre `Incl` e as variáveis `Frente` e `Area`.
@@ -969,11 +1074,13 @@ ou heteroscedasticidade.
 
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-38-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-40-1.png){width=960}
 :::
 :::
+
 
 
 
@@ -981,17 +1088,20 @@ ou heteroscedasticidade.
 ## Aparte: imputação de dados (2) 
 
 
+
 ::: {.cell}
 ::: {.cell-output-display}
-![](SOBREA2024_files/figure-revealjs/unnamed-chunk-39-1.png){width=960}
+![](SOBREA2024_files/figure-revealjs/unnamed-chunk-41-1.png){width=960}
 :::
 :::
+
 
 
 ## Aparte: imputação de dados (3) {.smaller}
 
 
 ### Modelo com dados imputados
+
 
 
 ::: {.cell}
@@ -1017,12 +1127,12 @@ ou heteroscedasticidade.
 <tbody>
   <tr>
    <td style="text-align:left;"> (Intercept) </td>
-   <td style="text-align:right;"> 8,67 </td>
+   <td style="text-align:right;"> 7,97 </td>
    <td style="text-align:right;"> 0,03 </td>
-   <td style="text-align:right;"> 261,44 </td>
+   <td style="text-align:right;"> 240,54 </td>
    <td style="text-align:right;"> 0,00 </td>
-   <td style="text-align:right;"> 8,62 </td>
-   <td style="text-align:right;"> 8,71 </td>
+   <td style="text-align:right;"> 7,93 </td>
+   <td style="text-align:right;"> 8,02 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> log(Area/450) </td>
@@ -1068,6 +1178,7 @@ ou heteroscedasticidade.
 :::
 
 
+
 - A imputação de dados permite o ajuste de modelos com todas as variáveis,
 aproveitando todas as informações disponíveis.
 
@@ -1085,8 +1196,10 @@ pequenas amostras: *joint multiple imputation* (JMI)!
 . . . 
 
 
+
 ::: {.cell}
 ::: {.cell-output .cell-output-stdout}
+
 ```
 
 Bayesian linear model fitted with JointAI
@@ -1098,14 +1211,14 @@ lm_imp(formula = logPU ~ logArea + logFrente + logIncl, data = dados,
 
 Posterior summary:
                Mean     SD    2.5%   97.5% tail-prob. GR-crit MCE/SD
-(Intercept)  8.6302 0.0445  8.5447  8.7165    0.00000    1.00 0.0285
-logArea     -0.3357 0.1142 -0.5498 -0.1086    0.00933    1.05 0.0717
-logFrente    0.2936 0.1630 -0.0292  0.5923    0.06867    1.04 0.0675
+(Intercept)  7.9370 0.0445  7.8518  8.0233    0.00000    1.00 0.0285
+logArea     -0.3354 0.1144 -0.5496 -0.1086    0.00933    1.06 0.0824
+logFrente    0.2932 0.1630 -0.0292  0.5923    0.06867    1.04 0.0677
 logIncl     -0.0894 0.0302 -0.1451 -0.0337    0.00600    1.00 0.0277
 
 Posterior summary of residual std. deviation:
               Mean     SD   2.5%  97.5% GR-crit MCE/SD
-sigma_logPU 0.0707 0.0157 0.0522 0.0972    1.01 0.0255
+sigma_logPU 0.0707 0.0156 0.0522 0.0974    1.01 0.0256
 
 
 MCMC settings:
@@ -1116,12 +1229,34 @@ Number of chains = 3
 
 Number of observations: 30 
 ```
+
+
 :::
 :::
+
 
 
     
 # Fatores Aditivos
+
+## Introdução {.smaller}
+
+- Os fatores multiplicativos derivam de um modelo multiplicativo 
+  - $PU = \beta_0.\exp(\beta_1)^{X_1}\ldots\exp(\beta_k)^{X_k}.\varepsilon$
+
+- Da mesma maneira, os fatores aditivos, devem ser derivados de um modelo
+aditivo 
+  - $PU = \beta_0+\beta_1X_1 + \ldots + \beta_kX_k + \varepsilon$
+
+- Apesar do erro dificilmente aparecer no mercado imobiliário na forma aditiva
+
+- Existem técnicas que permitem o ajustamento de modelos com erros não-constantes
+  - MQP: @wls2024
+  - Ressuscitando MQP: @ROMANO20171
+  
+- Trabalhar na escala original (PU) tem algumas vantagens
+  - Ausência de distorções devido às transformações
+  - Desnecessidade de retransformação da variável
 
 ## Derivação de Fatores Aditivos {.smaller}
 
@@ -1145,6 +1280,7 @@ estiverem centralizadas!
 
 
 ## Modelo aditivo minimalista {.smaller}
+
 
 
 ::: {.cell}
@@ -1243,6 +1379,7 @@ estiverem centralizadas!
 :::
 
 
+
 - Como as variáveis explicativas estão centralizadas no imóvel paradigma, então
 $\hat\beta_0 = \bar{PU}_{hom}$!
 
@@ -1321,6 +1458,7 @@ Baixo) tem valor unitário de mercado igual a R$ 6.147,07/m2
 
 
 
+
 ::: {.cell}
 
 ```{.r .cell-code}
@@ -1328,12 +1466,16 @@ predict(fit, newdata = list(PC = "Medio", Ano = "_2022", Idade = 5, AP = 200))
 ```
 
 ::: {.cell-output .cell-output-stdout}
+
 ```
        1 
 11673.75 
 ```
+
+
 :::
 :::
+
 
 
 - O método de @lima2006 funciona!
@@ -1345,9 +1487,11 @@ predict(fit, newdata = list(PC = "Medio", Ano = "_2022", Idade = 5, AP = 200))
 # Conclusão
 
 
+
 ::: {.cell}
 
 :::
+
 
 
 ## Conclusão {.smaller}
