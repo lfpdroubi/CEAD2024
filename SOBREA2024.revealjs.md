@@ -47,7 +47,7 @@ prefer-html: true
 
 -   É possível conciliar?
 
-    -   @upav2024, @valorem2024Augusto, @Cerino2020, @trivelloni2005
+    -   @upav2024, @valorem2024Augusto, @droubi2021, @Cerino2020, @trivelloni2005
 
 -   Há outras vantagens, além da clareza, na utilização do tratamento por fatores?
 
